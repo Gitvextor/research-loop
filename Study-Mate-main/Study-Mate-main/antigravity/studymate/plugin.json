@@ -1,0 +1,20 @@
+{
+  "name": "studymate",
+  "displayName": "StudyMate",
+  "version": "0.2.0",
+  "description": "你的AI学习搭档：定计划、讲知识、做项目，学透一门科目。包含总控、课程设计、讲解、练习评估等完整学习工作流与HTML课件引擎，原生支持 Google Antigravity 多智能体协同。",
+  "author": {
+    "name": "Miaotofu01"
+  },
+  "repository": "https://github.com/Miaotofu01/Study-Mate",
+  "license": "MIT",
+  "keywords": [
+    "study",
+    "learning",
+    "education",
+    "courseware",
+    "math",
+    "cs",
+    "antigravity"
+  ]
+}

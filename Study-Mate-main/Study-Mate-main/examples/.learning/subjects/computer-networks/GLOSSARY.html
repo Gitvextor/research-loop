@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>术语表 · 计算机网络</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="index.html">← 返回科目</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">术语表</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>计算机网络 Glossary</h1>
+<p>这门课讲的是「一次网页请求在网线里经过了什么」：从浏览器发出的字节，到分层封装、以太网帧、IP 转发，再到 TCP 的可靠传输与真机抓包。</p>
+<blockquote><p>两节都算这门课的<strong>规范用词</strong>：课件正文与配图用词以本文件为准。开课时先把主题词写进「待掌握」，<br>学生真的会用之后挪进「已掌握」——挪动本身就是一条学习记录。</p></blockquote>
+<h2>待掌握</h2>
+<p><strong>首部与载荷</strong>:<br>首部是本层自己要读的控制信息（地址、序号、长度等），载荷是上层交下来的全部内容。同一段字节在上一层是载荷，到下一层就变成「首部＋载荷」的一部分。<br><em>Avoid</em>: 包头与包体、头信息与数据体</p>
+<p><strong>以太网帧</strong>:<br>链路层在一个局域网内实际传输的单元，由目的 MAC、源 MAC、类型、载荷与校验和组成；两端网卡与交换机都按这个格式读写。<br><em>Avoid</em>: 数据帧、以太帧、packet（帧与包不是一回事）</p>
+<p><strong>MAC 地址</strong>:<br>网卡在局域网内的地址，48 位，通常写成六组十六进制数。它只在同一个局域网内用来找到下一跳，出了这个局域网就换掉了。<br><em>Avoid</em>: 物理地址、硬件地址、网卡地址</p>
+<p><strong>交换机</strong>:<br>局域网里把多台设备连起来、按 MAC 地址把帧只转发到目标那一口的设备。它不读 IP 地址，也不关心帧里装的是网页还是视频。<br><em>Avoid</em>: 交换器、HUB（集线器是另一种设备，所有口都转发）</p>
+<p><strong>MTU</strong>:<br>最大传输单元，一层能承载的载荷字节数上限；以太网常见值是 1500。超过它就要分片或由上层切成多段。<br><em>Avoid</em>: 最大包长、最大帧长（帧含首部，与 MTU 不是一个数）</p>
+<p><strong>前缀长度</strong>:<br>写在斜杠后面的数字，表示 32 位 IP 地址里前多少位属于网络部分，其余位属于主机部分。它取代了 A/B/C 类地址，写法如 <code>/26</code>。<br><em>Avoid</em>: 掩码长度、子网位数、网络位</p>
+<p><strong>子网掩码</strong>:<br>与前缀长度等价的一种写法：网络部分写 1、主机部分写 0，再用点分十进制表示，<code>/26</code> 对应 <code>255.255.255.192</code>。<br><em>Avoid</em>: 掩码、netmask（与「通配符掩码」不是一回事）</p>
+<p><strong>默认网关</strong>:<br>本机路由表里那条「目标不在本网段时该交给谁」的记录，通常就是本网段路由器的地址。它必须与本机地址在同一网段，否则根本发不出去。<br><em>Avoid</em>: 网关地址、出口路由、路由器地址</p>
+<p><strong>逐跳转发</strong>:<br>IP 包从源到目的不是一次飞过去，而是每到一个路由器就查一次表、决定下一跳，逐段接力。每一跳都换链路层首部，IP 首部除 TTL 外基本不变。<br><em>Avoid</em>: 路由跳转、寻址、直连</p>
+<p><strong>TCP 三次握手</strong>:<br>建立 TCP 连接时双方交换三个报文，用来确认彼此的收发能力并同步初始序号。连接建立后，重传、排序与流量控制都建立在序号之上。<br><em>Avoid</em>: 三次握手（单独用时要写明是 TCP）、SYN 握手</p>
+<h2>已掌握</h2>
+<p><strong>协议分层</strong>:<br>能用「浏览器、操作系统、网卡、路由器各管一段」把一次网页请求拆开讲，并说出某一层换掉时哪一层不用改。<br><em>Avoid</em>: 网络分层</p>
+<p><strong>封装</strong>:<br>能指出一段 HTTP 请求从浏览器到网线上依次被加上了哪几个首部，并按字节数算出多出来的开销。<br><em>Avoid</em>: 打包、包装</p>
+  <footer class="lesson-footer">
+    StudyMate · 术语表 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

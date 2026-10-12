@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>资源清单 · 计算机网络</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="index.html">← 返回科目</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">资源清单</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>计算机网络 Resources</h1>
+<blockquote><p>定位：<strong>延伸阅读 + 易变内容的核对来源</strong>，不是"知识来源清单"（模型已掌握稳定基础知识）。<br>稳定知识节点可以不在这里留条目；易变/版本相关内容必须在这里有核对过的官方来源。</p></blockquote>
+<h2>Knowledge</h2>
+<ul>
+<li><a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noopener">RFC 9293: Transmission Control Protocol</a><br>核对 TCP 首部字段、三次握手与状态机；2022 年取代 RFC 793，第 4 课的术语以它为准。</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc791.html" target="_blank" rel="noopener">RFC 791: Internet Protocol</a><br>核对 IPv4 首部字段（版本、TTL、协议号）与分片规则；第 1、3 课讲的「IP 头 20 字节」出自这里。</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc4632.html" target="_blank" rel="noopener">RFC 4632: CIDR 与路由聚合</a><br>核对「前缀长度」「网络地址」「广播地址」的正式定义，以及为什么废掉 A/B/C 类划分。</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc3021.html" target="_blank" rel="noopener">RFC 3021: 点对点链路上的 /31 前缀</a><br>核对第 3 课 lab 的边界用例：/31 只有两个地址、两个都能用，与 /30 的算法不同。</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc826.html" target="_blank" rel="noopener">RFC 826: 地址解析协议 ARP</a><br>核对 IP 地址解析到 MAC 地址的过程；第 2 课讲「同一网段内怎么找到对方」时对照。</li>
+<li><a href="https://www.ieee802.org/3/" target="_blank" rel="noopener">IEEE 802.3 以太网工作组</a><br>核对以太网帧格式、最小帧长与 CSMA/CD 的现行标准入口；标准正文收费，先用这里的公开概览。</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview" target="_blank" rel="noopener">MDN: HTTP 概述</a><br>核对一次请求/响应报文的组成与常见首部，用来确定第 1 课里「应用层载荷」的边界。</li>
+<li><a href="https://www.wireshark.org/docs/wsug_html_chunked/" target="_blank" rel="noopener">Wireshark 用户指南</a><br>第 5 课实验的抓包与显示过滤器用法；「Follow TCP Stream」一节的步骤照它做。</li>
+<li><a href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener">tcpdump 手册页</a><br>核对命令行抓包的选项（<code>-i</code>、<code>-n</code>、<code>-w</code>、<code>-r</code>）与过滤表达式写法。</li>
+<li><a href="https://docs.python.org/zh-cn/3/library/ipaddress.html" target="_blank" rel="noopener">Python ipaddress 模块</a><br>第 3 课 lab 的对照实现：手算完用 <code>ip_network()</code> 复核，<code>hosts()</code> 的边界行为也在这里查。</li>
+<li><a href="https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html" target="_blank" rel="noopener">Cisco: IP Addressing and Subnetting for New Users</a><br>厂商文档 · 子网划分的算例与掩码速查表，卡住时换一种排版看同一件事。</li>
+<li><a href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank" rel="noopener">Computer Networking: A Top-Down Approach 作者站（Kurose 与 Ross）</a><br>书 · 配套站上有 Wireshark Labs 与章节讲义；第 5 课实验的题目可以照它的 Wireshark Lab 改，讲义用来换一种讲法看同一件事。</li>
+</ul>
+<h2>Wisdom (Communities)</h2>
+<ul>
+<li><a href="https://serverfault.com/" target="_blank" rel="noopener">Server Fault</a><br>排障类提问（"这个端口为什么连不上"）；附上抓包片段与 <code>ip addr</code> 输出更容易得到答复。</li>
+<li><a href="https://networkengineering.stackexchange.com/" target="_blank" rel="noopener">Network Engineering Stack Exchange</a><br>协议行为与设备配置的问答；查「同一个现象在标准里怎么规定」时比论坛靠谱。</li>
+<li><a href="https://ask.wireshark.org/" target="_blank" rel="noopener">Wireshark Q&amp;A</a><br>抓包文件看不懂时贴上去问；问之前先自己用显示过滤器缩到一条流。</li>
+</ul>
+<h2>Gaps</h2>
+<ul>
+<li>缺中文的、以抓包为主线按「一次请求的时间线」组织的入门材料；目前靠 Wireshark 用户指南与教材第 1 章互补。</li>
+<li>无线侧（802.11 的帧格式与管理帧）没找到合适的免费一手资料，本轮不深入，第 2 课只讲「无线帧会被翻译成以太网帧」这一层结论。</li>
+</ul>
+  <footer class="lesson-footer">
+    StudyMate · 资源清单 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

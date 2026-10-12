@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习记录：0002-matrix.transform · 线性代数</title>
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>线性代数</span>
+  <span class="lesson-bar__no">学习记录</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>学习记录：0002-matrix.transform</h1>
+<ul>
+<li><strong>日期</strong>：2026-09-24</li>
+<li><strong>用了多久</strong>：40 分钟（一次）</li>
+<li><strong>对应课件</strong>：<a href="../lessons/0002-matrix.transform.html">矩阵与线性变换</a></li>
+</ul>
+<h2>这节课学了什么</h2>
+<p>把矩阵从「一堆并排的数」读成「一个对空间做的动作」：矩阵的两列是基向量被搬到的落点，秩是变换之后<br>剩下的维数，零空间是被压掉的那些方向。三个词最后收到一条式子上：秩加零空间维数等于列数。</p>
+<h2>他的表现</h2>
+<ul>
+<li><strong>进门时的状态</strong>：上一课已经能把方程组读成列向量的组合，所以「每一列是一个落点」这一步接得很顺。<br>讲斜切矩阵时，他先在纸上画了 $e_1$、$e_2$ 的新位置，再回头解释为什么 $A(x, y) = x \cdot (1, 0)</li>
+<li>y \cdot (2, 1)$。先画图再说话是他的固定路径。</li>
+<li><strong>秩的几何解释</strong>：一次就通。讲完「秩是变换后剩下的维数」之后，他自己用第 1 课的「两列成比例」<br>造了一个秩 1 的例子，还能说出这个变换把整个平面压到了哪条直线上。这一块接受度最好。</li>
+<li><strong>卡点</strong>：算 <code>[[1, 2], [2, 4]]</code> 的零空间维数时，他先说「有两行，所以维数是 2」。让他先不看公式、<br>直接解 <code>x + 2y = 0</code>，他写出 <code>(x, y) = t·(−2, 1)</code>，自己发现是一条直线、维数是 1，这才回头把<br>秩-零化度定理右边的「列数」对上。<strong>这个错误值得记下来</strong>：他把公式记成了「行数 − 秩」。</li>
+<li><strong>动手部分</strong>：练习第 1 步的四组向量都跑了。把矩阵换成斜切之后，他先猜零空间里有非零向量，<br>跑出来四个落点都不是零向量，自己改口说「两列不成比例，没有方向被压掉」。</li>
+</ul>
+<h2>没解决的问题</h2>
+<ul>
+<li>3×3 矩阵的秩与零空间还没有独立算过一遍；课件里那张三种矩阵的对照表他能读懂，但合上书填不出来。</li>
+<li>「矩阵乘法不能交换顺序」目前只是听我说过，没有自己撞过一次。第 4 课讲换基时会再碰到。</li>
+</ul>
+<h2>下一步</h2>
+<p>按大纲进入 <code>system.elimination</code>（第 3 课，实操 + lab）。这一课要把「数主元」写成代码，正好补上他<br>今天缺的那次独立计算：<code>pivot_columns</code> 返回的就是主元列，秩与自由变量个数都从它来。今天暴露的零空间<br>误解已记进 <code>progress.yaml</code>（topic：零空间维数），第 3 课讲自由变量个数时再让他自己复述一遍<br>「自由变量个数 = 列数 − 秩」。</p>
+<h2>原文留档（他的话）</h2>
+<blockquote><p>「所以矩阵就是把这个方向压扁、那个方向不动？那秩就是还剩几个方向没被压扁。」</p></blockquote>
+<blockquote><p>「等等，两行不就是两个方向吗……哦不对，进来的是两个数，是两列。」</p></blockquote>
+  <footer class="lesson-footer">
+    StudyMate · 学习记录：0002-matrix.transform · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

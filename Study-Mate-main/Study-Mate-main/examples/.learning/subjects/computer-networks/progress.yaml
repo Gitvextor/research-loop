@@ -1,0 +1,37 @@
+# 学习进度：运行期状态只写在这里（curriculum.yaml 的 status/mastery 是建课时的初始快照）。
+# nodes 只记**有变化的**节点，没写的按大纲初始值算；状态枚举见 schemas/progress.schema.json。
+updated_at: "2026-09-24"
+nodes:
+  net.layers:
+    status: 能独立应用
+    mastery: 0.85
+    notes: 9-21 读完课件、页内自测 5 题全对；9-23 评估按 L2 出题，独立算对了封装开销并说清了每层加了什么头，判通过。
+  net.link:
+    status: 初步理解
+    mastery: 0.5
+    notes: 9-24 读完课件、页内题做完；帧字段能读出来，但"交换机为什么不看 IP"还说不完整，等第 3 课讲完转发再回头验。
+  net.ip:
+    status: 学习中
+    mastery: 0.25
+    notes: 9-24 开始；lab 留白任务已下发，ip_to_int 写出来了，network_of 卡在掩码的位运算上。
+misconceptions:
+  - topic: 子网掩码的算法
+    question: /26 的掩码是 255.255.255.192，为什么 192.168.1.100 的网络地址是 192.168.1.64，不是 192.168.1.0？
+    misunderstanding: 把掩码当成"按点切字符串"，习惯性地按 8 位一组截断，遇到不是 8 的倍数的前缀长度就凭感觉取整。
+    answer_summary: 掩码是按位与：100 与 192 逐位相与得 64，所以网络地址是 192.168.1.64。
+    follow_up: 在 lab 里用 network_of 把 192.168.1.100/26 与 /27 各跑一遍，再把主机位全置 1 求广播地址。
+    importance: high
+  - topic: MAC 地址的作用范围
+    question: 我的请求到了服务器，服务器看到的源 MAC 地址是我的网卡吗？
+    misunderstanding: 以为 MAC 地址和 IP 地址一样端到端不变，跟着包一路到服务器。
+    answer_summary: 链路层首部每一跳都重写，服务器看到的源 MAC 是它上一跳路由器的，不是你的网卡。
+    follow_up: 对比同一台机器访问内网地址与外网地址时 ARP 表的变化，在抓包里找出源 MAC 被换掉的那一跳。
+    importance: high
+  - topic: 封装开销
+    question: 抓包里 IP 头 20 字节、以太网头 14 字节，这些也算我用的流量吗？
+    misunderstanding: 以为只有 HTTP 请求那 300 字节算流量，各层的首部是协议自己的事、不占带宽。
+    answer_summary: 首部与载荷一样占带宽，一条 300 字节的请求在线路上实际跑了 358 字节。
+    follow_up: 算一条满载 1500 字节的响应的首部占比，与 300 字节的请求比一比哪个比例更高。
+    importance: medium
+project:
+  current: 用抓包解释一次自己的网页请求——把浏览器打开 example.com 的全过程抓下来，逐层标出每层加了什么头、这个包走了哪几跳。

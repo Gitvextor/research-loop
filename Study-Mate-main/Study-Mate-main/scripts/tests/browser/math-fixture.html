@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- 公式排版 fixture：结构照渲染产物写（KaTeX 三件按需注入在正文之后，见 docs/课件内容格式.md 第 3 节）。
+     引用仓库内的 templates/assets/，所以路径是 ../../../templates/assets/… -->
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>公式排版 fixture</title>
+<link rel="stylesheet" href="../../../templates/assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../templates/assets/style.css">
+<script src="../../../templates/assets/learn-theme.js"></script>
+</head>
+<body class="lesson-body">
+
+<article class="lesson">
+  <h2>公式</h2>
+  <p>行内：<span class="math-inline">Ax = b</span> 与 <span class="math-inline">\lambda_1 v_1</span>。</p>
+  <div class="math-block">\begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 3 \end{bmatrix}
+\begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 9 \\ 10 \end{bmatrix}</div>
+  <p>写错的公式不该炸整页：<span class="math-inline">\frac{1}{</span></p>
+  <p>后面这段正常文字还要在。</p>
+
+  <h2>题目里的公式</h2>
+  <div class="quiz" data-quiz='[{&quot;q&quot;: &quot;矩阵 $\\begin{bmatrix} 2 &amp; 1 \\\\ 1 &amp; 3 \\end{bmatrix}$ 的行列式是多少？&quot;, &quot;opts&quot;: [&quot;$1$&quot;, &quot;$6$&quot;], &quot;ans&quot;: 1, &quot;why&quot;: &quot;用 $ad - bc$ 算。&quot;}]'></div>
+</article>
+
+<link rel="stylesheet" href="../../../templates/assets/katex/katex.min.css">
+<script src="../../../templates/assets/katex/katex.min.js" defer></script>
+<script src="../../../templates/assets/lesson-math.js" defer></script>
+<script src="../../../templates/assets/quiz.js" defer></script>
+
+</body>
+</html>

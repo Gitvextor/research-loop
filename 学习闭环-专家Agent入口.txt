@@ -1,0 +1,16 @@
+可单独运行的六个专家：
+实践者 learning_practitioner；学者 learning_researcher；怀疑者 learning_skeptic；经济学家 learning_economist；历史学家 learning_historian；证据审查员 learning_peer_reviewer。
+
+在本项目的新 Codex 任务中直接说：
+“请让 learning_skeptic 子代理分析【主题】。用途是【具体用途】，我的基础是【基础】，适用地域/时点是【...】。只交付失败路径、证据和最小验证，不运行其他角色。”
+
+五视角建图：
+“请用 $learning-loop 对【主题】建图：五位专家独立分析，合成共识、分歧和盲区，形成简报，再由 learning_peer_reviewer 审查。我的用途是【...】。”
+
+只做证据审查：
+“请让 learning_peer_reviewer 审查以下简报及其来源：【粘贴内容】。”
+
+与 StudyMate 联动：
+“请用 $learning-loop-studymate 对【主题】先做五视角建图和证据审查，再把修订后的简报交接给 StudyMate 建课。”
+
+六份独立 MD 在 .codex/skills/learning-loop/references/experts/；调度规范在 .codex/skills/learning-loop/references/专家调度.md。Codex 注册入口在 .codex/agents/，仅在支持项目自定义子代理的环境里生效；其他 AI 可直接复制相应 MD 使用。StudyMate 源码不等于插件已安装。

@@ -1,0 +1,5 @@
+- [x] 适配deepseek herness最新版本
+- [x] npm包修改
+- [x] 课件agent提示词优化
+- [ ] 出题agent提示词优化
+- [ ] SKILL索引表

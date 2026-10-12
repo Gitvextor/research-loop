@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分层模型与封装 · 计算机网络</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">0001</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0001 · 分层模型与封装</span>
+    <h1>分层模型与封装</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能画出一次网页请求经过的各层，并说清每层加了什么头。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/课件内容格式.md ── -->
+
+  <h2>地址栏敲下回车之后</h2>
+
+  <p>21:47，你在地址栏敲下 <code>example.com</code> 回车，大约 100 毫秒后页面出现。这 100 毫秒里，笔记本做的事可以粗分成四类：</p>
+
+  <ul>
+    <li>把 <code>example.com</code> 问成一台服务器的 IP 地址</li>
+    <li>和一个从没打过交道的服务器确认「两边现在都能收发」</li>
+    <li>把一页文本切成能在网线或空气里跑的比特</li>
+    <li>每到一台中间设备，就重新决定下一段往哪送</li>
+  </ul>
+
+  <p>这四件事的变化速度差得很远：网页内容一天能改十次，网卡十年换一代，而中间那些设备换不换、走哪条路，你的浏览器完全不知道。<b>协议分层</b>（protocol layering）要解决的就是这件事——把通信切成若干层，每一层只解决一类问题，只使用下一层提供的服务，不关心下一层内部怎么做。</p>
+
+  <p>分层这个想法出现在 1974 年：Cerf 与 Kahn 描述跨网通信时，把「端到端要保证什么」与「每一段链路怎么走」拆成了两件事，这是分层的起点；1978 年 TCP 被拆成 TCP 与 IP 两个协议；1984 年 ISO 发布 OSI 七层参考模型。工程上真正跑起来的是 TCP/IP 的四层划分，下面按这四层讲。</p>
+
+  <h2>四层各管一段</h2>
+
+  <table>
+    <thead>
+      <tr><th>层</th><th>这一段要决定的事</th><th>这一层用的地址</th><th>常见协议</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>应用层</td><td>要哪一页、用什么格式交换</td><td>域名与 URL</td><td>HTTP、DNS</td></tr>
+      <tr><td>传输层</td><td>哪个程序收、数据是否完整有序</td><td>端口号</td><td>TCP、UDP</td></tr>
+      <tr><td>网络层</td><td>从哪台机器到哪台机器，跨网段接力</td><td>IP 地址</td><td>IP</td></tr>
+      <tr><td>链路层</td><td>紧挨着的两个设备之间怎么把比特交过去</td><td>MAC 地址</td><td>以太网、WiFi</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="四层协议栈与每层使用的地址">
+<svg viewBox="0 0 640 240" role="img" aria-hidden="true">
+  <g font-size="16" fill="currentColor">
+    <rect x="20" y="20" width="420" height="44" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.35"/>
+    <text x="36" y="48">应用层 · 要哪一页、什么格式</text>
+    <text x="460" y="48" fill-opacity="0.75">域名与 URL</text>
+    <rect x="20" y="72" width="420" height="44" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.35"/>
+    <text x="36" y="100">传输层 · 哪个程序收</text>
+    <text x="460" y="100" fill-opacity="0.75">端口号</text>
+    <rect x="20" y="124" width="420" height="44" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.35"/>
+    <text x="36" y="152">网络层 · 哪台机器到哪台机器</text>
+    <text x="460" y="152" fill-opacity="0.75">IP 地址</text>
+    <rect x="20" y="176" width="420" height="44" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.35"/>
+    <text x="36" y="204">链路层 · 相邻设备怎么交比特</text>
+    <text x="460" y="204" fill-opacity="0.75">MAC 地址</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 四层各自要决定的事与各自使用的地址</figcaption>
+  </figure>
+
+  <p>每一层只管自己那一格。浏览器不需要知道这一段路是网线还是 WiFi，网卡也不需要知道帧里装的是网页还是一段视频。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "你在浏览器里输入一个域名并回车。\n这个域名必须先变成 IP 地址，才会出现在网络层首部里。\n完成这一步的是哪一层？",
+    "opts": [
+      "应用层：把要访问的域名解析成地址",
+      "传输层：把要访问的目标解析成端口号",
+      "网络层：地址本来就由它分配和转发",
+      "链路层：把目标地址写进帧的首部"
+    ],
+    "ans": 0,
+    "why": "域名解析由应用层的 DNS 完成，网络层只认已经解析好的 IP 地址。"
+  },
+  {
+    "q": "有人说「分层就是让每一层各自独立，哪一层出问题都只影响那一层」。\n请举一个跨层的例子说明这句话在什么情况下不成立，并指出跨了哪两层。",
+    "answer": "两个例子都成立，举一个即可：\n\n① 隧道：内层 IP 包被整份塞进外层包的载荷，\n网络层在同一条报文里出现两次首部，\n链路层算长度时也要按外层来。\n\n② 域名解析：DNS 查询要靠传输层与网络层送到 DNS 服务器，\nDNS 不通时的表现是网页打不开，\n只看应用层根本判断不出问题在哪。",
+    "criteria": "例子里确实同时涉及两层或更多层；\n说清是哪几层、为什么必须一起看或一起改。\n只复述「分层让各层解耦」、举不出跨层例子，不算答对。"
+  }
+]'></div>
+
+  <h2>一层套一层</h2>
+
+  <p>发送方把上层交下来的整份内容当作<b>载荷</b>（payload），在前面加上本层的<b>首部</b>（header），再交给下一层；接收方从头开始逐层剥掉首部，把剩下的交给上层。这个过程叫<b>封装</b>（encapsulation），剥的过程叫解封装。</p>
+
+  <p>它的直接后果是：同一段字节在不同层里的名字和长度都不一样。下面是一条最小 HTTP 请求的原始内容，逐字写出来是这样（<code>\r\n</code> 是回车加换行，各占一个字节）：</p>
+
+  <pre data-lang="http"><code>GET /index.html HTTP/1.1
+Host: example.com
+User-Agent: curl/8.4.0
+Accept: */*
+</code></pre>
+
+  <p>按下字节数逐行数一遍：</p>
+
+  <ul>
+    <li>请求行 <code>GET /index.html HTTP/1.1</code> 连同行尾，<span class="math-inline">26</span> 字节</li>
+    <li><code>Host: example.com</code> 连同行尾，<span class="math-inline">19</span> 字节</li>
+    <li><code>User-Agent: curl/8.4.0</code> 连同行尾，<span class="math-inline">24</span> 字节</li>
+    <li><code>Accept: */*</code> 连同行尾，<span class="math-inline">13</span> 字节</li>
+    <li>结尾那个空行，<span class="math-inline">2</span> 字节</li>
+  </ul>
+
+  <p>合计 <span class="math-inline">26 + 19 + 24 + 13 + 2 = 84</span> 字节，这就是应用层交给传输层的东西。传输层在前面加 <span class="math-inline">20</span> 字节 TCP 首部（源端口、目的端口、序号等），变成 <span class="math-inline">104</span> 字节；网络层再加 <span class="math-inline">20</span> 字节 IP 首部（源地址、目的地址、生存时间等），变成 <span class="math-inline">124</span> 字节；链路层再加 <span class="math-inline">14</span> 字节以太网首部与 <span class="math-inline">4</span> 字节帧尾校验，变成 <span class="math-inline">142</span> 字节。真正上线路的是这 <span class="math-inline">142</span> 字节：</p>
+
+  <div class="math-block">20 + 20 + 14 + 4 = 58</div>
+
+  <p>也就是说，为了让 <span class="math-inline">84</span> 字节的请求跑起来，线路上一共多花了 <span class="math-inline">58</span> 字节，占实际流量的 <span class="math-inline">58 / 142 \approx 40.8\%</span>。请求越小，这个比例越难看。换成一条满载的响应，载荷 <span class="math-inline">1500</span> 字节，帧长 <span class="math-inline">14 + 1500 + 4 = 1518</span> 字节，同样的 <span class="math-inline">58</span> 字节首部只占 <span class="math-inline">58 / 1518 \approx 3.8\%</span>。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="逐层封装后长度从 84 字节长到 142 字节">
+<svg viewBox="0 0 640 240" role="img" aria-hidden="true">
+  <g font-size="14" fill="currentColor">
+    <text x="30" y="40" font-size="16">应用层</text>
+    <rect x="120" y="24" width="168" height="24" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="300" y="42" font-size="16">84 B</text>
+    <text x="30" y="90" font-size="16">传输层</text>
+    <rect x="120" y="74" width="40" height="24" fill="currentColor" fill-opacity="0.45"/>
+    <text x="130" y="92">20</text>
+    <rect x="160" y="74" width="168" height="24" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="340" y="92" font-size="16">104 B</text>
+    <text x="30" y="140" font-size="16">网络层</text>
+    <rect x="120" y="124" width="40" height="24" fill="currentColor" fill-opacity="0.45"/>
+    <text x="130" y="142">20</text>
+    <rect x="160" y="124" width="40" height="24" fill="currentColor" fill-opacity="0.3"/>
+    <text x="170" y="142">20</text>
+    <rect x="200" y="124" width="168" height="24" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="380" y="142" font-size="16">124 B</text>
+    <text x="30" y="190" font-size="16">链路层</text>
+    <rect x="120" y="174" width="28" height="24" fill="currentColor" fill-opacity="0.45"/>
+    <text x="127" y="192">14</text>
+    <rect x="148" y="174" width="40" height="24" fill="currentColor" fill-opacity="0.3"/>
+    <text x="158" y="192">20</text>
+    <rect x="188" y="174" width="40" height="24" fill="currentColor" fill-opacity="0.2"/>
+    <text x="198" y="192">20</text>
+    <rect x="228" y="174" width="168" height="24" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <rect x="396" y="174" width="8" height="24" fill="currentColor" fill-opacity="0.45"/>
+    <text x="420" y="192" font-size="16">142 B</text>
+    <text x="120" y="224">浅色是 HTTP 请求本身，深色是各层加上的首部与帧尾校验</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 同一条请求在四层里的长度，色块是各层加的首部</figcaption>
+  </figure>
+
+  <div class="lesson-note">
+    <b>20 字节是下限</b>
+    <p>上面按「不带选项」的最短首部算：TCP 首部可以带选项而变长，IP 首部也一样，所以 <span class="math-inline">20</span> 是最小值。看到抓包里某一行比 <span class="math-inline">20</span> 长属于正常情况，按实际长度代入即可。</p>
+  </div>
+
+  <h2>动手数一遍</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 1 步 · 用自己的机器重算一次</span>
+    </div>
+
+      <p>把下面这段存成 <code>req_size.py</code> 再 <code>python3 req_size.py</code>：</p>
+
+      <pre data-lang="python"><code>req = (b"GET /index.html HTTP/1.1\r\n"
+       b"Host: example.com\r\n"
+       b"User-Agent: curl/8.4.0\r\n"
+       b"Accept: */*\r\n"
+       b"\r\n")
+print("应用层载荷", len(req), "字节")
+print("加传输层首部", len(req) + 20)
+print("加网络层首部", len(req) + 40)
+print("上线路", len(req) + 58)</code></pre>
+
+      <p>屏幕上应当是 <code>84</code>、<code>104</code>、<code>124</code>、<code>142</code> 四个数。对不上就先看括号里的字节串有没有被编辑器拆错行。</p>
+
+      <p>接着把请求行里的 <code>/index.html</code> 改成 <code>/a</code>，再跑一次。线路上的总字节数少了多少？首部那 <span class="math-inline">58</span> 字节有没有跟着变？</p>
+  </div>
+
+  <p>改完之后应当看到：载荷从 <span class="math-inline">84</span> 掉到 <span class="math-inline">75</span>，上线路的数字从 <span class="math-inline">142</span> 掉到 <span class="math-inline">133</span>，而 <span class="math-inline">58</span> 一动不动——首部长度由协议定，与内容多长无关。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "原来的请求行是 GET /index.html HTTP/1.1，\n现在改成下面这样，其余各行一律不动。\n上线路的总字节数会怎么变？\n\n```http\nGET /a HTTP/1.1\n```",
+    "opts": [
+      "少 9 字节，58 字节的首部不变",
+      "少 9 字节，首部也跟着少 9 字节",
+      "少 11 字节，58 字节的首部不变",
+      "不变，线路只统计首部那 58 字节"
+    ],
+    "ans": 0,
+    "why": "请求行少 9 字节，58 字节首部由协议定，与载荷长短无关。"
+  },
+  {
+    "q": "一条 84 字节的请求，首部占 40.8%。\n把 10 条这样的请求合并成一条 840 字节的载荷，\n首部占比降到多少？这个变化说明了什么？",
+    "answer": "上线路是 840 + 58 = 898 字节，\n首部占 58 / 898，约 6.5%。\n\n首部是按「每条报文」收的固定开销，不随载荷变大而变，\n所以载荷越大，它占的比例越小。\n把小请求合成大报文能省下这部分带宽。",
+    "criteria": "算出 898 字节与约 6.5% 这个量级；\n指出首部是每条报文的固定开销，因此载荷越大占比越小。\n只答「比例变小了」而给不出数字，不算答对。"
+  }
+]'></div>
+
+  <h2>分层管不到的地方</h2>
+
+  <p>分层最实际的好处，是换掉一层时别的层不用动：宿舍的 WiFi 换成网线，只换链路层，IP 地址、端口号、那 84 字节的 HTTP 请求一个字都不用改；HTTP/1.1 换成 HTTP/2，网卡和中间的路由器完全不知道。</p>
+
+  <p>分层是设计约定，协议栈里有些功能天生跨越层，最典型的是隧道（VPN）：整个内层 IP 包被塞进外层包的载荷里，于是同一层出现两次首部。把你这条 <span class="math-inline">84</span> 字节的请求塞进一条走 TCP 的隧道，上线路的是 <span class="math-inline">84 + 20 \times 4 = 164</span> 字节，四个首部依次是外层 IP、外层 TCP、内层 IP、内层 TCP，比不隧道时多了 <span class="math-inline">22</span> 字节：</p>
+
+  <div class="math-block">20 \times 4 + 84 = 164</div>
+
+  <p>OSI 七层与实现也不一一对应。会话层、表示层在 TCP/IP 里没有独立的协议，它们要做的事被摊进了应用层与传输层。拿 OSI 的层名去对抓包，只会对不上号。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "同事在 VPN 上抓包，看到同一个 IP 首部出现了两次，\n第一反应是「网卡驱动出了问题」。\n请说明这个现象的成因，并指出这两个首部各是谁加的。",
+    "answer": "这是隧道封装，属于正常现象：\n原始报文先按正常流程加好内层 TCP 与内层 IP 首部，\n然后整份被当成载荷，又被外层 IP（以及外层 TCP 或 UDP）包了一遍。\n\n外层首部由 VPN 客户端加，负责把包送到 VPN 服务器；\n内层首部由原程序加，负责最终的目的地。",
+    "criteria": "说出「整份内层报文被当作载荷再封装一次」；\n两个首部的归属分得清：外层到 VPN 服务器，内层到最终目的地。\n把重复首部当成故障、或只说「网卡转发了一次」，不算答对。"
+  }
+]'></div>
+
+  <h2>记住这三个数</h2>
+
+  <ul>
+    <li>四层从上到下：应用、传输、网络、链路；地址依次是域名、端口、IP、MAC</li>
+    <li>封装 = 上层整份当载荷，前面加本层首部；解封装反过来</li>
+    <li>一条 <span class="math-inline">84</span> 字节的 HTTP 请求上线路是 <span class="math-inline">142</span> 字节，其中 <span class="math-inline">58</span> 字节是首部与校验</li>
+  </ul>
+
+  <ul class="lesson-resources">
+    <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview">MDN · HTTP 概述</a><span class="lesson-resources__meta">官方文档 · 确认应用层载荷的边界与常见首部</span></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc791.html">RFC 791 · Internet Protocol</a><span class="lesson-resources__meta">标准原文 · 网络层首部的字段表与各字段长度</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--next" href="0002-net.link.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">链路层与以太网帧</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0001 分层模型与封装 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

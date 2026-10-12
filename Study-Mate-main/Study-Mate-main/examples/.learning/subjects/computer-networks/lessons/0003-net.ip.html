@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IP 地址、子网与路由 · 计算机网络</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">0003</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0003 · IP 地址、子网与路由</span>
+    <h1>IP 地址、子网与路由</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能算出一个网段的可用地址范围，并说清一个包怎么被逐跳转发。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/课件内容格式.md ── -->
+
+  <h2>一个 ping 不通的下午</h2>
+
+  <p>实验室给了一台新机器，你照着同事给的纸条配好网络：</p>
+
+  <pre data-lang="text"><code>IP 地址     192.168.1.100
+子网掩码    255.255.255.192
+默认网关    192.168.1.1</code></pre>
+
+  <p>配完试了一下：<code>ping 192.168.1.65</code> 通，<code>ping 192.168.1.1</code> 不通，<code>ping 8.8.8.8</code> 也不通。同事路过看了一眼，说「网段配错了」。</p>
+
+  <p>他说的「网段」是可以算出来的：这台机器的地址与网关地址，必须落在同一个网段里，机器才发得出包。这一课讲的就是怎么算，以及包算出结果之后怎么走。</p>
+
+  <h2>前缀长度从哪来</h2>
+
+  <p>IP 地址是 32 位整数。写成 <code>192.168.1.100</code> 这种点分十进制只是为了好读，四组数字各对应 8 位：</p>
+
+  <div class="math-block">192 \times 2^{24} + 168 \times 2^{16} + 1 \times 2^{8} + 100 = 3232235876</div>
+
+  <p>最早的设计把地址分成 A、B、C 三类，由头几位决定网络部分占多少位。到 1992 年，B 类地址眼看要分完，1993 年的 RFC 1519 提出无类别域间路由（CIDR）：网络与主机的分界改由一个写明的前缀长度表示，也就是斜杠后面那个数字。今天写 <code>192.168.1.100/26</code>，<span class="math-inline">26</span> 就是前缀长度：前 <span class="math-inline">26</span> 位属于网络，剩下的 <span class="math-inline">32 - 26 = 6</span> 位属于主机。</p>
+
+  <p><b>子网掩码</b>是同一件事的另一种写法：网络位写 1、主机位写 0。<span class="math-inline">26</span> 个 1 后面接 <span class="math-inline">6</span> 个 0，写成点分十进制就是 <code>255.255.255.192</code>——最后一组 <span class="math-inline">192</span> 的二进制是 <code>11000000</code>，正好两位是 1。</p>
+
+  <p>主机位有多少位，这个网段就有多少个地址：<span class="math-inline">2^{6} = 64</span>。</p>
+
+  <h2>算出网段的范围</h2>
+
+  <p>有了前缀长度，网络地址和广播地址都能用位运算算出来。<b>网络地址</b>是把 IP 地址与掩码按位与，把主机位全部清零；<b>广播地址</b>是把主机位全部置 1，也就是网络地址加上「块大小减一」。</p>
+
+  <p>拿 <code>192.168.1.100/26</code> 走一遍。前 24 位两组都相同，只需要算最后一组：<span class="math-inline">100</span> 的二进制是 <code>01100100</code>，掩码最后一组 <span class="math-inline">192</span> 的二进制是 <code>11000000</code>。</p>
+
+  <div class="math-block">100 \ \&amp;\ 192 = 01100100_2 \ \&amp;\ 11000000_2 = 01000000_2 = 64</div>
+
+  <p>网络地址是 <code>192.168.1.64</code>。块大小 <span class="math-inline">2^{6} = 64</span>，所以广播地址是 <code>192.168.1.64 + 63 = 192.168.1.127</code>。两头这两个地址不能分配给主机：网络地址用来指代整个网段，广播地址用来发给网段里所有主机。可用地址是 <code>192.168.1.65</code> 到 <code>192.168.1.126</code>，一共 <span class="math-inline">2^{6} - 2 = 62</span> 个。</p>
+
+  <p>「减 2」这个规则在地址数不少于 4 个时成立；有两种前缀要单独记：</p>
+
+  <ul>
+    <li><code>/31</code>：只有 <span class="math-inline">2</span> 个地址。RFC 3021 允许点对点链路把这两个地址都分配给两端，所以可用数是 <span class="math-inline">2</span>，不减</li>
+    <li><code>/32</code>：只有 <span class="math-inline">1</span> 个地址，表示单台主机，常用在路由表里写明「就到这一台」</li>
+  </ul>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "一台机器配成 10.0.7.190/26。\n它所在网段的可用地址范围是哪一个？",
+    "opts": [
+      "10.0.7.129 ~ 10.0.7.190",
+      "10.0.7.65 ~ 10.0.7.126",
+      "10.0.7.128 ~ 10.0.7.191",
+      "10.0.7.129 ~ 10.0.7.191"
+    ],
+    "ans": 0,
+    "why": "190 与 192 按位与得 128，\n网络地址 .128、广播地址 .191，可用段两头各去掉一个。"
+  },
+  {
+    "q": "有人问：10.0.7.190/26 与 10.0.7.200/26\n是不是同一个网段？写出判断过程与结论。",
+    "answer": "块大小 64，网络地址最后一组只能是 0、64、128、192。\n\n190 与 192 按位与得 128，\n前一个属于 10.0.7.128/26，\n可用 10.0.7.129 ~ 10.0.7.190。\n\n200 与 192 按位与得 192，\n后一个属于 10.0.7.192/26，\n可用 10.0.7.193 ~ 10.0.7.254。\n\n两个地址挨在一起，却分属不同网段。",
+    "criteria": "算出两个网络地址分别是 10.0.7.128 与 10.0.7.192；\n结论是不同网段。\n只看「前三组数字相同」就判成同一网段，不算答对。"
+  }
+]'></div>
+
+  <h2>把 /24 切成四块</h2>
+
+  <p>一个 <code>/24</code> 有 <span class="math-inline">2^{8} = 256</span> 个地址，切成四个 <code>/26</code>，每块 <span class="math-inline">64</span> 个：</p>
+
+  <table>
+    <thead>
+      <tr><th>子网</th><th>网络地址</th><th>可用范围</th><th>广播地址</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>第一个 /26</td><td><code>192.168.1.0</code></td><td><code>192.168.1.1</code> ~ <code>192.168.1.62</code></td><td><code>192.168.1.63</code></td></tr>
+      <tr><td>第二个 /26</td><td><code>192.168.1.64</code></td><td><code>192.168.1.65</code> ~ <code>192.168.1.126</code></td><td><code>192.168.1.127</code></td></tr>
+      <tr><td>第三个 /26</td><td><code>192.168.1.128</code></td><td><code>192.168.1.129</code> ~ <code>192.168.1.190</code></td><td><code>192.168.1.191</code></td></tr>
+      <tr><td>第四个 /26</td><td><code>192.168.1.192</code></td><td><code>192.168.1.193</code> ~ <code>192.168.1.254</code></td><td><code>192.168.1.255</code></td></tr>
+    </tbody>
+  </table>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="192.168.1.0/24 切成四个 /26 子网">
+<svg viewBox="0 0 640 200" role="img" aria-hidden="true">
+  <g font-size="13" fill="currentColor">
+    <text x="40" y="24" font-size="15">192.168.1.0/24 一共 256 个地址</text>
+    <rect x="40" y="40" width="140" height="42" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.4"/>
+    <rect x="180" y="40" width="140" height="42" fill="currentColor" fill-opacity="0.34" stroke="currentColor" stroke-opacity="0.4"/>
+    <rect x="320" y="40" width="140" height="42" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.4"/>
+    <rect x="460" y="40" width="140" height="42" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="110" y="67" text-anchor="middle">192.168.1.0/26</text>
+    <text x="250" y="67" text-anchor="middle">192.168.1.64/26</text>
+    <text x="390" y="67" text-anchor="middle">192.168.1.128/26</text>
+    <text x="530" y="67" text-anchor="middle">192.168.1.192/26</text>
+    <text x="110" y="106" text-anchor="middle">可用 .1 ~ .62</text>
+    <text x="250" y="106" text-anchor="middle">可用 .65 ~ .126</text>
+    <text x="390" y="106" text-anchor="middle">可用 .129 ~ .190</text>
+    <text x="530" y="106" text-anchor="middle">可用 .193 ~ .254</text>
+    <text x="250" y="134" text-anchor="middle">192.168.1.100 在这一块</text>
+    <text x="40" y="170" font-size="14" fill-opacity="0.85">网关 192.168.1.1 落在第一块，与 .100 所在的第二块分属不同网段</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 一个 /24 切成四个 /26，各块的可用范围</figcaption>
+  </figure>
+
+  <p>前三组数字相同的两个地址，也可能属于不同网段，分界由前缀长度决定。这一点是「网段配错」最常见的来源。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "把 192.168.1.0/24 切成四个 /26 之后，\n192.168.1.100 与 192.168.1.130\n能不能直接通信（不经过路由器）？",
+    "opts": [
+      "不能，两块不同，要经网关转发",
+      "能，前三组数字相同就够了",
+      "能，两者都在私有地址段里",
+      "不能，130 不能分配给主机"
+    ],
+    "ans": 0,
+    "why": ".100 落在 .64/26 那一块，.130 落在 .128/26 那一块，\n属于两个网段。"
+  },
+  {
+    "q": "一台机器的地址是 192.168.1.100/26，\n网关写成 192.168.1.1。它连网关都 ping 不通，为什么？",
+    "answer": "网关必须与本机地址在同一个网段里。\n本机的网段是 192.168.1.64/26，可用范围 .65 ~ .126；\n192.168.1.1 落在 192.168.1.0/26 那一块。\n两者不同网段，发往网关的包本机送不出去，\n所有跨网段的流量就一起断了。",
+    "criteria": "算出本机网段是 192.168.1.64/26，并指出 .1 不在其中；\n说明网关与本机必须同网段。\n只说「网关配错了」而给不出网段，算部分正确。"
+  }
+]'></div>
+
+  <h2>动手算与对照</h2>
+
+  <p>标准库已经把这套算法实现了，先用它把上面那个配置算一遍，再和自己手算的结果对上：</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 1 步 · 用标准库验一遍手算</span>
+    </div>
+
+      <pre data-lang="python"><code>import ipaddress
+
+net = ipaddress.ip_network("192.168.1.100/26", strict=False)
+print("网络地址", net.network_address)
+print("广播地址", net.broadcast_address)
+print("这一块多大", net.num_addresses)
+hosts = list(net.hosts())
+print("可用范围", hosts[0], "~", hosts[-1])
+print("可用个数", len(hosts))
+print("网关在不在这一块", ipaddress.ip_address("192.168.1.1") in net)</code></pre>
+
+      <p><code>strict=False</code> 是必须的：<code>192.168.1.100</code> 是主机地址，不是网络地址，标准库默认会拒绝这种写法。</p>
+
+      <pre data-lang="term"><code>$ python3 check_subnet.py
+网络地址 192.168.1.64
+广播地址 192.168.1.127
+这一块多大 64
+可用范围 192.168.1.65 ~ 192.168.1.126
+可用个数 62
+网关在不在这一块 False</code></pre>
+  </div>
+
+  <p>最后一行 <code>False</code> 就是 <code>ping 192.168.1.1</code> 不通的直接原因：机器认为网关在别的网段里，于是要去查路由表；而路由表里唯一通往外界的路就是那个网关，包还没出网卡就被搁下了。</p>
+
+  <h2>自己写一个算网段的工具</h2>
+
+  <p>标准库能算，但把它当成黑盒用，遇到 <code>/26</code> 这类前缀还是会心里没底。这一课的 lab 要求用位运算自己实现同样的函数：点分十进制与整数的互转、网络地址、广播地址、可用范围、判断两台机器是否同网段、把一个网段切成等长的子网。写完用 <code>python3 -m unittest</code> 跑测试，测试拿标准库当对照答案。</p>
+
+  <ul>
+    <li><a href="../lab/README.md">lab 说明</a>：载体、环境与任务表</li>
+    <li><a href="../lab/0003-ip-subnet/ipcalc.py">任务文件 ipcalc.py</a>：函数体留白，跑测试会红</li>
+    <li><a href="../lab/0003-ip-subnet/test_ipcalc.py">测试 test_ipcalc.py</a>：断言与边界用例</li>
+  </ul>
+
+  <h2>一个包怎么走</h2>
+
+  <p>算完自己的网段，接下来看包怎么出门。本机发一个包之前先做一次判断：目的地址与本机地址在不在同一个网段？在，就直接交给对方；不在，就交给<b>默认网关</b>——路由表里那条「别的网段都走这里」的记录。</p>
+
+  <p>网关收到包之后做四件事：查自己的路由表决定下一跳、把 IP 首部里的生存时间（TTL）减 1、换一套新的链路层首部、从对应的口发出去。如此接力，直到有一台路由器发现自己与目的地址直连，把包交给最终的那台机器。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="一个包从笔记本经过三跳到达服务器的路径">
+<svg viewBox="0 0 640 220" role="img" aria-hidden="true">
+  <g font-size="15" fill="currentColor">
+    <rect x="10" y="80" width="120" height="64" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="70" y="106" text-anchor="middle">你的笔记本</text>
+    <text x="70" y="128" text-anchor="middle" font-size="13" fill-opacity="0.8">192.168.1.100</text>
+    <rect x="180" y="80" width="120" height="64" rx="6" fill="currentColor" fill-opacity="0.10" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="240" y="106" text-anchor="middle">家用路由器</text>
+    <text x="240" y="128" text-anchor="middle" font-size="13" fill-opacity="0.8">192.168.1.1</text>
+    <rect x="350" y="80" width="120" height="64" rx="6" fill="currentColor" fill-opacity="0.10" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="410" y="106" text-anchor="middle">运营商</text>
+    <text x="410" y="128" text-anchor="middle" font-size="13" fill-opacity="0.8">203.0.113.7</text>
+    <rect x="520" y="80" width="120" height="64" rx="6" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.4"/>
+    <text x="580" y="106" text-anchor="middle">服务器</text>
+    <text x="580" y="128" text-anchor="middle" font-size="13" fill-opacity="0.8">93.184.216.34</text>
+    <line x1="130" y1="112" x2="180" y2="112" stroke="currentColor" stroke-width="2"/>
+    <line x1="300" y1="112" x2="350" y2="112" stroke="currentColor" stroke-width="2"/>
+    <line x1="470" y1="112" x2="520" y2="112" stroke="currentColor" stroke-width="2"/>
+    <text x="155" y="168" text-anchor="middle" font-size="13">64→63</text>
+    <text x="325" y="168" text-anchor="middle" font-size="13">63→62</text>
+    <text x="495" y="168" text-anchor="middle" font-size="13">62→61</text>
+    <text x="10" y="200" font-size="14" fill-opacity="0.85">箭头下方是 TTL：每经过一台路由器减 1，减到 0 就丢弃并回一条超时报文</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 逐跳转发：每跳换一次链路层首部，TTL 减 1</figcaption>
+  </figure>
+
+  <p>TTL 存在的理由是防环：路由表配置出错时，包可能在几台路由器之间转圈；有了这个上限，转够 <span class="math-inline">255</span> 跳就会被丢掉。<code>traceroute</code> 正是利用它工作——故意把 TTL 设成 <span class="math-inline">1</span>、<span class="math-inline">2</span>、<span class="math-inline">3</span>，让路径上每一台路由器轮流回一条超时报文，路径就显出来了。</p>
+
+  <p>家用网络里还有一层变化：<code>192.168.1.100</code> 这样的地址是私有地址（<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code> 三段），只允许在局域网里出现。包出门时，家用路由器把源地址换成自己的公网地址再发出去，回来的包再换回去。所以家里所有设备都写 <code>192.168.1.x</code> 并不会冲突，外面的服务器看到的也不是你的内网地址。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "同事在抓包里看到同一个包的 TTL 从 64 变成 63、62、61，\n可 IP 首部里的源地址与目的地址一直没变。\n他怀疑抓包工具改坏了数据，请说明这两个现象。",
+    "answer": "TTL 每经过一台路由器减 1，一路递减属于正常。\nIP 首部里的源地址与目的地址标识通信的两端，\n从发出到送达都不该变，跟着变的只有 TTL 与校验和。\n每一跳真正被换掉的是链路层首部里的 MAC 地址，\n它在抓包里与 IP 首部不在同一段字节里。",
+    "criteria": "说明 TTL 逐跳减 1 属正常、源与目的地址端到端不变；\n指出每跳换掉的是链路层 MAC 地址而不是 IP 地址。\n把 TTL 变化当成异常，或认为源地址也该逐跳改变，不算答对。"
+  }
+]'></div>
+
+  <h2>把开头的机器修好</h2>
+
+  <p>回到那台 ping 不通的机器。它的地址是 <code>192.168.1.100/26</code>，属于 <code>192.168.1.64</code> 到 <code>192.168.1.127</code> 这一块；网关 <code>192.168.1.1</code> 属于 <code>192.168.1.0</code> 到 <code>192.168.1.63</code> 那一块。两者不在同一个网段，包连网关都到不了。</p>
+
+  <p>两种改法都能救回来：</p>
+
+  <ul>
+    <li>掩码改成 <code>255.255.255.0</code>（也就是 <code>/24</code>），整段 <code>192.168.1.0</code> ~ <code>192.168.1.255</code> 变成一个网段，网关 <code>192.168.1.1</code> 就落在里面了</li>
+    <li>保留 <code>/26</code>，把网关改成一个落在 <code>192.168.1.65</code> ~ <code>192.168.1.126</code> 里的地址，例如 <code>192.168.1.65</code></li>
+  </ul>
+
+  <p>选哪一种取决于这个网段里到底打算放多少台机器：<span class="math-inline">62</span> 个可用地址够用就留 <code>/26</code>，图省事就退到 <code>/24</code>。<code>ping 192.168.1.65</code> 一开始就是通的，因为它与这台机器在同一块里。</p>
+
+  <ul class="lesson-resources">
+    <li><a href="https://www.rfc-editor.org/rfc/rfc4632.html">RFC 4632 · CIDR</a><span class="lesson-resources__meta">标准原文 · 前缀长度的正式定义</span></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc3021.html">RFC 3021 · 点对点链路上的 /31</a><span class="lesson-resources__meta">标准原文 · lab 边界用例的依据</span></li>
+    <li><a href="https://docs.python.org/zh-cn/3/library/ipaddress.html">Python ipaddress 模块</a><span class="lesson-resources__meta">官方文档 · lab 的对照实现</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0002-net.link.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">链路层与以太网帧</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0004-net.tcp.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">TCP 与可靠传输</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0003 IP 地址、子网与路由 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+# 计算机网络 · 课程大纲
+# 顺序即教学位次（课件文件名 <序号>-<节点id>.md 的序号按它算），依赖只能指向前面的节点。
+# 每个节点的 status/mastery 是**建课时的初始快照**；运行期的状态只写在 progress.yaml。
+nodes:
+  - id: net.layers
+    title: 分层模型与封装
+    kind: 概念
+    objective: 能画出一次网页请求经过的各层，并说清每层加了什么头
+    problem: 会连 WiFi、会用浏览器，但说不清地址栏敲下回车之后发生了什么；抓到包只觉得是一屏十六进制。
+    prerequisites: []
+    concepts:
+      - 协议分层
+      - 封装
+      - 首部与载荷
+    practice: 以讲为主：先把"每层各管一段"的框架立起来，再拿一条真实的 HTTP 请求按层数一遍字节数。
+    pitfalls:
+      - 把 OSI 七层当成实际实现，去背每层的名字
+      - 以为分层是四段独立的程序，不知道外层的头会随链路换掉
+    realworld: 网页打不开时，先判断卡在哪一层——是链路没通、地址不对，还是端口没人听。
+    status: 未开始
+    mastery: 0
+  - id: net.link
+    title: 链路层与以太网帧
+    kind: 概念
+    objective: 能读出一个以太网帧的字段，并说清 MAC 地址与交换机的作用
+    problem: 同一个 WiFi 下室友也在传文件，为什么自己的包不会跑到他电脑上；MAC 地址和 IP 地址到底谁管谁。
+    prerequisites:
+      - net.layers
+    concepts:
+      - 以太网帧
+      - MAC 地址
+      - 交换机
+      - MTU
+    practice: 以讲为主，配一张按字节比例画的帧结构图；练习是从一段十六进制 dump 里切出地址字段。
+    pitfalls:
+      - 以为 MAC 地址会像 IP 一样一路跟着包到服务器
+      - 把交换机当成会看 IP 的设备，用它去解释跨网段的转发
+    realworld: 宿舍或实验室里换网口、插交换机，判断"是不是插错口了、有没有环"。
+    status: 未开始
+    mastery: 0
+  - id: net.ip
+    title: IP 地址、子网与路由
+    kind: 实操
+    objective: 能算出一个网段的可用地址范围，并说清一个包怎么被逐跳转发
+    problem: 家里的设备都是 192.168.1.x，凭什么说它们在同一网段；服务器配错掩码时，为什么"网关 ping 得通、外面就是不通"。
+    prerequisites:
+      - net.layers
+      - net.link
+    concepts:
+      - 前缀长度
+      - 子网掩码
+      - 默认网关
+      - 逐跳转发
+    practice: 讲练并重：手写位运算算子网（lab 的源码 + 测试），再用 Python 标准库 ipaddress 复核。
+    pitfalls:
+      - 只记 255.255.255.0 这一种掩码，遇到 /26 就退回按 8 位一组切
+      - 把网络地址或广播地址当成可以分配给主机的地址
+      - 以为网关可以不在本网段里
+    realworld: 给一台机器配静态地址、排查"同网段能通、跨网段不通"，都靠这一课的算法。
+    status: 未开始
+    mastery: 0
+  - id: net.tcp
+    title: TCP 与可靠传输
+    kind: 概念
+    objective: 能解释三次握手、确认重传与流量控制在解决什么问题
+    problem: IP 只负责把包送出去，丢了、乱了、对方收不下都不管；那网页里的每个字节是怎么保证一字不差的。
+    prerequisites:
+      - net.ip
+    concepts:
+      - TCP 三次握手
+      - 序号与确认
+      - 超时重传
+      - 流量控制
+    practice: 以讲为主：把序号与确认画成一条时间轴，用一次丢包走一遍重传。
+    pitfalls:
+      - 以为三次握手是为了"加密"或"登录"
+      - 把重传当成异常，不知道它是正常机制
+    realworld: 下载卡住、连接超时、服务端 TIME_WAIT 堆积，都从这一课的概念解释。
+    status: 未开始
+    mastery: 0
+  - id: net.experiment
+    title: 实验：TCP 回显客户端与抓包
+    kind: 实验
+    objective: 能用真实抓包解释一次完整 TCP 会话的建立、传输与关闭
+    problem: 前面四课都是纸上的；没有自己抓过一次包，遇到真实网络问题时仍然不知道从哪一行看起。
+    prerequisites:
+      - net.layers
+      - net.link
+      - net.ip
+      - net.tcp
+    concepts:
+      - 抓包
+      - TCP 三次握手
+      - 首部与载荷
+    practice: 里程碑验收：写一个回显客户端，在同一台机器上抓下整段会话，逐行指出握手、数据与关闭。
+    pitfalls:
+      - 抓包时忘了带 -n，被反向解析拖慢而丢包
+      - 在错误的网卡上抓，只看到自己的回环流量
+    realworld: 线上问题排查的第一手材料就是抓包；这一课决定后面能不能自己看。
+    status: 未开始
+    mastery: 0
+edges:
+  - from: net.layers
+    to: net.link
+    reason: 不讲分层与封装，就看不懂帧里为什么有两种地址。
+  - from: net.layers
+    to: net.ip
+    reason: 子网计算属于网络层，先要有"层"这个框架才知道它加的是哪个头。
+  - from: net.link
+    to: net.ip
+    reason: 逐跳转发要讲清"每一跳换链路层地址"，前提是知道 MAC 地址只在本网段有效。
+  - from: net.ip
+    to: net.tcp
+    reason: 序号、端口与端到端的概念建立在 IP 的不可靠投递之上。
+  - from: net.ip
+    to: net.experiment
+    reason: 抓包时要能认出 IP 头里的地址与 TTL，才能判断包走到了哪一跳。
+  - from: net.tcp
+    to: net.experiment
+    reason: 实验的验收对象是一次完整 TCP 会话，没有这一课的序号与握手就没有可比对的预期。

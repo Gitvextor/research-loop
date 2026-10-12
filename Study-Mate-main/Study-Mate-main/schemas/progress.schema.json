@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Progress",
+  "type": "object",
+  "required": ["updated_at", "nodes", "misconceptions", "project"],
+  "properties": {
+    "updated_at": { "type": "string", "format": "date-time" },
+    "nodes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "mastery"],
+        "properties": {
+          "status": { "enum": ["未开始", "学习中", "初步理解", "能独立应用", "需要复习", "已通过项目验证"] },
+          "mastery": { "type": "number", "minimum": 0, "maximum": 1 },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "misconceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "question", "misunderstanding", "answer_summary"],
+        "properties": {
+          "topic": { "type": "string" },
+          "question": { "type": "string" },
+          "misunderstanding": { "type": "string" },
+          "answer_summary": { "type": "string" },
+          "follow_up": { "type": "string" },
+          "importance": { "enum": ["low", "medium", "high"] }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "required": ["current"],
+      "description": "在做的项目。里程碑与置位规则见 `record-keeping` 的「项目与实验课」（里程碑就是 curriculum.yaml 里 kind: 实验 的节点）。",
+      "properties": {
+        "current": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Local and generated files
+tmp/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+# Local secrets and editor state
+.env
+.env.*
+.idea/
+.vscode/
+

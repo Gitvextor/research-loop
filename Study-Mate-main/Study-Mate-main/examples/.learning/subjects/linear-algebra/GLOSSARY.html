@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>术语表 · 线性代数</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="index.html">← 返回科目</a>
+  <span>线性代数</span>
+  <span class="lesson-bar__no">术语表</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>线性代数 Glossary</h1>
+<p>这门课把线性代数的符号换成能看见的东西：几支箭头怎么拼出目标箭头、一个矩阵把平面变成了什么样、<br>一个方程组到底有几个解。术语按「先来历、后定义」讲，本文件只留下定义与统一用词。</p>
+<blockquote><p>两节都算这门课的<strong>规范用词</strong>：课件正文与配图用词以本文件为准。开课时先把主题词写进「待掌握」，<br>学生真的会用之后挪进「已掌握」——挪动本身就是一条学习记录。</p></blockquote>
+<h2>待掌握</h2>
+<p><strong>矩阵 (matrix)</strong>:<br>按行与列排好的一个数表；它同时是「若干列向量并排站着」和「一个对空间做的动作」两种东西。<br><em>Avoid</em>: 二维数组（那是它在代码里的类型名，不是它在线代里的角色）</p>
+<p><strong>线性变换 (linear transformation)</strong>:<br>保持加法与数乘的映射：先加再变换与先变换再加结果相同，数乘可以先提出来。原点在这样的映射下不动。<br><em>Avoid</em>: 线性映射（同义词，本课统一用「变换」，因为它强调空间被改动的过程）</p>
+<p><strong>秩 (rank)</strong>:<br>矩阵的列向量里线性无关的最多个数；几何上是变换之后剩下的维数——平面被压成一条线，秩就是 1。<br><em>Avoid</em>: 非零行的个数（那是行阶梯形上数出来的结果，直接数原矩阵的非零行会错）</p>
+<p><strong>零空间 (null space)</strong>:<br>所有被矩阵送到零向量的输入向量构成的集合，衡量这个变换压掉了多少信息；它的维数 = 列数 − 秩。<br><em>Avoid</em>: 解空间（只在方程组的语境下等价，泛指时会把「零」这个关键条件丢掉）</p>
+<p><strong>秩-零化度定理 (rank–nullity theorem)</strong>:<br>秩 + 零空间维数 = 列数。右边是输入向量的分量个数，也就是未知量个数，不是方程个数。<br><em>Avoid</em>: 「行数减秩」（把输入空间的维数记成了方程个数，是这个知识点最常见的错法）</p>
+<p><strong>增广矩阵 (augmented matrix)</strong>:<br>把方程组的系数与等号右边的常数并排写进同一个矩阵，消元时两边同步变化，不用每步重抄方程。<br><em>Avoid</em>: 扩大矩阵（「增广」是固定译名，别自造）</p>
+<p><strong>初等行变换 (elementary row operation)</strong>:<br>交换两行、把某一行乘以一个非零数、把某一行的倍数加到另一行。三种操作都不改变方程组的解集。<br><em>Avoid</em>: 行运算（省略了「初等」，听起来像任何对行的改动，而乘以 0 这类改动会改变解集）</p>
+<p><strong>主元 (pivot)</strong>:<br>行阶梯形里每一行第一个非零元素的位置，也就是被用来消掉下方同列元素的那些位置；主元的个数就是秩。<br><em>Avoid</em>: 首项、第一个数（说不清它「被用来消元」的功能）</p>
+<p><strong>自由变量 (free variable)</strong>:<br>化简后所在列没有主元的那些未知量，可以任取值的量；它的个数决定解集是几维的东西。<br><em>Avoid</em>: 未知量、变量（每个未知量都是变量，只有非主元的那几个才「自由」）</p>
+<p><strong>行阶梯形 (row echelon form)</strong>:<br>消元的目标形状：主元逐行右移、主元下方全是 0、全零行垫底；再让主元为 1 且主元列其余为 0，就是<br>最简行阶梯形。<br><em>Avoid</em>: 三角矩阵（那是方阵上的另一回事，非方阵与非零行垫底都不在它的定义里）</p>
+<p><strong>基 (basis)</strong>:<br>一组既线性无关、又能张成整个空间的向量；空间里每个向量写成它们的组合时，系数是唯一的。<br><em>Avoid</em>: 坐标系（坐标系还包含原点与方向的规定，基只是那组用来拼的向量）</p>
+<p><strong>坐标 (coordinates)</strong>:<br>一个向量在某组基下那组唯一的系数；坐标不是向量自带的属性，换一组基就换一组数。<br><em>Avoid</em>: 分量（分量默认指标准基下的那组数，换个语境就说不通）</p>
+<p><strong>特征值 (eigenvalue)</strong>:<br>$\lambda$ 使得存在非零向量 $v$ 满足 $Av = \lambda v$；这种 $v$ 的方向在变换下不变，只被拉伸或<br>压缩了 $\lambda$ 倍。<br><em>Avoid</em>: 本征值（同义词，本课统一用「特征值」；「特征」在这里指方向不变这个性质）</p>
+<h2>已掌握</h2>
+<p><strong>向量 (vector)</strong>:<br>一组有序的数，可以看成一个从原点出发的箭头，也可以看成一份特征清单——两种读法指的是同一个东西。<br><em>Avoid</em>: 数组、列表（那是它在代码里的样子，不是它的定义）</p>
+<p><strong>列向量 (column vector)</strong>:<br>竖着写的一组数；$Ax$ 就是「用 $A$ 的各列按 $x$ 的分量加权拼出来」。<br><em>Avoid</em>: 竖排数组</p>
+<p><strong>线性组合 (linear combination)</strong>:<br>把若干向量各自乘上一个数再相加得到的结果；$2a - 3b$ 就是 $a$ 与 $b$ 的一个线性组合。<br><em>Avoid</em>: 线性叠加（物理课的说法，含义相同，但与矩阵乘法的说法接不上）</p>
+<p><strong>张成 (span)</strong>:<br>一组向量的全部线性组合构成的集合，也就是它们能一起到达的所有地方；两个不共线的平面向量张成整个平面。<br><em>Avoid</em>: 覆盖范围（太口语，说不清「能到达」与「到达过」的区别）</p>
+<p><strong>线性无关 (linearly independent)</strong>:<br>一组向量里没有任何一个能由其余向量拼出来；等价的说法是，只有系数全为零时组合才等于零向量。<br><em>Avoid</em>: 互不相关（「相关」在统计里有别的意思，会串味）</p>
+  <footer class="lesson-footer">
+    StudyMate · 术语表 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

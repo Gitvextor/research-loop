@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Subject",
+  "type": "object",
+  "required": ["name", "slug", "goal", "created_at", "status"],
+  "properties": {
+    "name": { "type": "string" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "goal": { "type": "string" },
+    "created_at": { "type": "string", "format": "date" },
+    "status": { "enum": ["进行中", "暂停", "已完成"] }
+  }
+}

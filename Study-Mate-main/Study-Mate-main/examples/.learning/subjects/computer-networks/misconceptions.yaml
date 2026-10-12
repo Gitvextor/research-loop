@@ -1,0 +1,27 @@
+# 误解库：只追加。每条与 progress.yaml 的 misconceptions 对得上（topic 逐字一致）。
+# 字段口径见 .dsh/skills/local-qa/SKILL.md；任何字段都不写 null，没有内容就省略可选行。
+# 顺序与「学习进度」的 misconceptions 一致：最近一条在最前。
+- date: "2026-09-24"
+  node: net.ip
+  topic: 子网掩码的算法
+  question: /26 的掩码是 255.255.255.192，为什么 192.168.1.100 的网络地址是 192.168.1.64，不是 192.168.1.0？
+  misunderstanding: 把掩码当成"按点切字符串"，习惯性地按 8 位一组截断，遇到不是 8 的倍数的前缀长度就凭感觉取整。
+  answer_summary: 掩码是按位与：100 与 192 逐位相与得 64，所以网络地址是 192.168.1.64。
+  follow_up: 在 lab 里用 network_of 把 192.168.1.100/26 与 /27 各跑一遍，再把主机位全置 1 求广播地址。
+  importance: high
+- date: "2026-09-24"
+  node: net.link
+  topic: MAC 地址的作用范围
+  question: 我的请求到了服务器，服务器看到的源 MAC 地址是我的网卡吗？
+  misunderstanding: 以为 MAC 地址和 IP 地址一样端到端不变，跟着包一路到服务器。
+  answer_summary: 链路层首部每一跳都重写，服务器看到的源 MAC 是它上一跳路由器的，不是你的网卡。
+  follow_up: 对比同一台机器访问内网地址与外网地址时 ARP 表的变化，在抓包里找出源 MAC 被换掉的那一跳。
+  importance: high
+- date: "2026-09-21"
+  node: net.layers
+  topic: 封装开销
+  question: 抓包里 IP 头 20 字节、以太网头 14 字节，这些也算我用的流量吗？
+  misunderstanding: 以为只有 HTTP 请求那 300 字节算流量，各层的首部是协议自己的事、不占带宽。
+  answer_summary: 首部与载荷一样占带宽，一条 300 字节的请求在线路上实际跑了 358 字节。
+  follow_up: 算一条满载 1500 字节的响应的首部占比，与 300 字节的请求比一比哪个比例更高。
+  importance: medium

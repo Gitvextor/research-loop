@@ -1,0 +1,5 @@
+name: ""              # 科目显示名，如 TypeScript Web API
+slug: ""              # 文件夹名，小写连字符，如 typescript-web-api
+goal: ""              # 这门科目想达到什么——MISSION.md 的浓缩，不是另写一份：约束（零基础／环境／时间投入）必须保留
+created_at: ""        # "YYYY-MM-DD"，含引号（YAML 不带引号会解析成日期对象，schema 校验会失败）
+status: 进行中        # 进行中 | 暂停 | 已完成

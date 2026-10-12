@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习记录 0001 · 分层模型与封装 · 计算机网络</title>
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">学习记录</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>学习记录 0001 · 分层模型与封装</h1>
+<ul>
+<li>日期：2026-09-21</li>
+<li>节点：<code>net.layers</code></li>
+<li>记录人：主教练</li>
+</ul>
+<h2>观察到的证据</h2>
+<p>打开课件前他说「网页请求不就是浏览器发给服务器吗，中间有什么好讲的」。读完第一节课件后，<br>在没有提示的情况下把那条 84 字节的请求逐层算了一遍，主动说出「每加一个头，下面一层看到的<br>就是一整块，它不用管里面是什么」——这是封装的定义，不是复述课件里的句子。</p>
+<h2>学会了什么</h2>
+<ul>
+<li>四层的顺序与各自使用的地址能自己排出来（应用、传输、网络、链路；域名、端口、IP、MAC）</li>
+<li>能算出一条请求在线路上的字节数：84 字节载荷，加 58 字节首部后是 142 字节</li>
+<li>会把「首部也占带宽」用到判断上：小请求的首部占比高，批量合并能省下这部分</li>
+</ul>
+<h2>被纠正的理解</h2>
+<p>9-21 问过「IP 头 20 字节、以太网头 14 字节这些也算我用的流量吗」，当时的理解是「只有 HTTP<br>那 300 字节算流量」。按具体数字算过一遍之后改口为「首部和载荷一样占带宽」，这条已记进<br>误解库（<code>topic: 封装开销</code>）。</p>
+  <footer class="lesson-footer">
+    StudyMate · 学习记录 0001 · 分层模型与封装 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

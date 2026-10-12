@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Assessment",
+  "description": "一次评估的记录：practice-evaluator 出的题、学生的作答、逐题结论与依据。YAML frontmatter 承载本 schema 的字段（日期加引号），正文写题面与作答原文；落盘、命名与搬运规则见 `record-keeping` 的「评估记录」。",
+  "type": "object",
+  "required": ["node", "date", "questions", "verdict"],
+  "properties": {
+    "node": { "type": "string", "description": "节点 id（curriculum.yaml 的 nodes[].id）" },
+    "date": { "type": "string", "description": "评估日期 YYYY-MM-DD；YAML 里必须加引号" },
+    "layer": {
+      "enum": ["L1", "L2", "L3", "L4"],
+      "description": "本次出题的目标层级（`kind: 实操` 与 `kind: 实验` 都可到 L4，见 `layered-practice` 第一节）"
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["q", "verdict"],
+        "properties": {
+          "q": { "type": "string", "description": "题面" },
+          "kind": { "enum": ["概念", "实操", "证据核验"] },
+          "answer": { "type": "string", "description": "学生作答原文（或交付物路径）" },
+          "verdict": { "enum": ["通过", "部分通过", "不通过"] },
+          "note": { "type": "string", "description": "这条结论的依据与缺口：对的是哪条判分要点、缺哪一条、差一步怎么过（部分通过/不通过时必写）" }
+        }
+      }
+    },
+    "mastery": { "type": "number", "minimum": 0, "maximum": 1, "description": "本次评估建议的掌握度" },
+    "verdict": {
+      "enum": ["通过", "部分通过", "不通过"],
+      "description": "整个节点的结论；三档口径见 `layered-practice` 第五节"
+    },
+    "next": { "type": "string", "description": "下一步建议：升级/回退到哪一层、复习、或进入下一节点" },
+    "misconceptions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "本次暴露的误解 topic；双落点写入规则见 `record-keeping` 的「评估记录」"
+    }
+  }
+}

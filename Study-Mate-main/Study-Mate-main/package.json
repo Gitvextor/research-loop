@@ -1,0 +1,76 @@
+{
+  "name": "@yunmiao/studymate",
+  "version": "0.2.0",
+  "description": "StudyMate learning skills and lesson engine for DeepSeek Harness, Google Antigravity, Codex and ChatGPT Work.",
+  "bin": {
+    "studymate": "bin/studymate.mjs"
+  },
+  "exports": {
+    ".": "./bin/dsh-plugin.mjs",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "cordis.patch.yml",
+    "bin/*.mjs",
+    "openai/studymate/.codex-plugin/plugin.json",
+    "openai/studymate/requirements.txt",
+    "openai/studymate/scripts/*.py",
+    "openai/studymate/skills/learning-system/references/*.md",
+    "antigravity/studymate/**",
+    ".dsh/skills/**",
+    "preset/learning/**",
+    "scripts/*.py",
+    "schemas/*.json",
+    "templates/**",
+    "docs/*.md",
+    "docs/images/**",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build:plugin": "node bin/studymate.mjs build-plugin",
+    "build:antigravity": "node bin/studymate.mjs build-antigravity",
+    "test": "npm run test:installer && npm run test:openai && npm run test:antigravity && node scripts/release/checks.mjs",
+    "test:openai": "node --test scripts/tests/test_openai_plugin.mjs",
+    "test:antigravity": "node --test scripts/tests/test_antigravity_plugin.mjs",
+    "test:installer": "node --test scripts/tests/test_installer.mjs scripts/tests/test_bundle.mjs",
+    "test:static": "node scripts/release/checks.mjs --static",
+    "test:browser": "node scripts/release/checks.mjs --browser",
+    "test:release": "node --test scripts/release/release.test.mjs",
+    "test:dsh": "node --test scripts/tests/test_dsh_runtime.mjs",
+    "test:dsh-cli": "node --test scripts/tests/test_dsh_plugin_cli.mjs"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "license": "MIT",
+  "author": "Cattofu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miaotofu01/Study-Mate.git"
+  },
+  "homepage": "https://github.com/Miaotofu01/Study-Mate#readme",
+  "bugs": {
+    "url": "https://github.com/Miaotofu01/Study-Mate/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "studymate",
+    "learning",
+    "education",
+    "antigravity",
+    "codex",
+    "chatgpt"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
+}

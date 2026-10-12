@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>向量与线性组合 · 线性代数</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>线性代数</span>
+  <span class="lesson-bar__no">0001</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0001 · 向量与线性组合</span>
+    <h1>向量与线性组合</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能把方程组读成列向量的线性组合，并说清线性无关的几何含义。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/课件内容格式.md ── -->
+
+  <h2>一杯拼配饮品的两个数</h2>
+
+  <p>一家饮料店有两种基液。A 液每 100 ml 提供 1 单位咖啡因与 2 单位糖，B 液每 100 ml 提供 2 单位咖啡因与 1 单位糖。要配出一杯成品，其中咖啡因 4 单位、糖 5 单位，两种基液各取几份（每份 100 ml）？</p>
+
+  <p>先把两种基液的成分各写成一对数，第一个数是咖啡因、第二个数是糖：</p>
+
+  <ul>
+    <li>A 液：<span class="math-inline">(1, 2)</span></li>
+    <li>B 液：<span class="math-inline">(2, 1)</span></li>
+  </ul>
+
+  <p>设 A 取 <span class="math-inline">x</span> 份、B 取 <span class="math-inline">y</span> 份，成品就是「<span class="math-inline">x</span> 份的 <span class="math-inline">(1, 2)</span>」加上「<span class="math-inline">y</span> 份的 <span class="math-inline">(2, 1)</span>」。这个动作由两件事拼成：把一对数整体乘一个倍数，再把两对数逐位相加。整门线性代数都只用到这两个操作，后面的张成、矩阵、秩、特征值都是它们的推论。</p>
+
+  <p>这样的一对数称为<b>向量</b>（vector，拉丁文 <em>vehere</em> 意为「搬运」，18 世纪的数学家把「带方向地搬动一个点」记成了它）。一对数可以看成一个点、一支从原点出发的箭头，也可以看成一张成分表；三种看法随时互换，指的是同一对数。</p>
+
+  <h2>加与乘：只有两个动作</h2>
+
+  <p>两个向量相加，逐位相加：<span class="math-inline">(1, 2) + (2, 1) = (3, 3)</span>。向量与一个数相乘（这个数称为<b>标量</b>， scalar，来自拉丁文 <em>scala</em>「梯子」，指像刻度一样可伸缩的量），逐位相乘：<span class="math-inline">3(1, 2) = (3, 6)</span>。先缩放、再相加，就得到配方问题的算式：</p>
+
+  <div class="math-block">x(1, 2) + y(2, 1) = (x + 2y,\ 2x + y)</div>
+
+  <p>要求它等于目标成分 <span class="math-inline">(4, 5)</span>，就得到两个方程 <span class="math-inline">x + 2y = 4</span> 与 <span class="math-inline">2x + y = 5</span>。按中学的办法解一遍：第一式乘 2 再减去第二式，得 <span class="math-inline">3y = 3</span>，所以 <span class="math-inline">y = 1</span>，代回得 <span class="math-inline">x = 2</span>。答案：A 液 200 ml、B 液 100 ml。这个解法没有错，但它没有说明白「解」到底是什么东西——下一节换一种读法。</p>
+
+  <h2>术语：线性组合</h2>
+
+  <p>「线性」一词来自拉丁文 <em>linearis</em>，本意是「属于线的」。17 世纪的笛卡尔用它描述两个量成正比的关系：一个量变化时，另一个量按固定倍数跟着变，画出来是一条直线。后来这个词被借来描述只含「相加」与「乘一个数」的运算，因为这类运算作用在坐标上时，每个分量都按固定的倍数变化。</p>
+
+  <p>给定一组向量 <span class="math-inline">v_1, v_2, \dots, v_n</span> 与一组数 <span class="math-inline">c_1, c_2, \dots, c_n</span>，</p>
+
+  <div class="math-block">c_1 v_1 + c_2 v_2 + \dots + c_n v_n</div>
+
+  <p>称为这组向量的一个<b>线性组合</b>（linear combination）。系数可以取任意实数：正数、负数、零、分数都允许。配方问题里 A、B 的份数不能是负数，那是实际问题加的限制；线性代数本身不限制系数的符号。</p>
+
+  <h2>术语：张成</h2>
+
+  <p>固定一组向量，把系数取遍所有可能的实数值，得到的结果放在一起，构成这组向量的<b>张成</b>（span）。一支非零向量只张成一条过原点的直线；两支不共线的向量张成整个平面；两支共线的向量张成的仍然只是那条直线。张成的维数取决于这组向量里有多少个「真正独立」的方向，下一节把这件事说准。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="左边两支不共线的向量铺满整个平面，右边两支共线的向量只铺出一条直线">
+<svg viewBox="0 0 360 160" role="img" aria-hidden="true" font-family="sans-serif" font-size="11">
+  <g stroke="currentColor" stroke-width="1" opacity="0.35">
+    <line x1="18" y1="80" x2="162" y2="80"/><line x1="90" y1="16" x2="90" y2="148"/>
+    <line x1="198" y1="80" x2="342" y2="80"/><line x1="270" y1="16" x2="270" y2="148"/>
+  </g>
+  <path d="M90 80 L150 30 L210 80 L150 130 Z" fill="currentColor" opacity="0.10"/>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <line x1="90" y1="80" x2="150" y2="30"/><line x1="90" y1="80" x2="132" y2="122"/>
+    <line x1="270" y1="80" x2="330" y2="30"/><line x1="270" y1="80" x2="322" y2="37"/>
+    <line x1="212" y1="96" x2="334" y2="64" stroke-dasharray="4 3" opacity="0.7"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="90" cy="80" r="2.5"/><circle cx="270" cy="80" r="2.5"/>
+  </g>
+  <g fill="currentColor" opacity="0.85">
+    <text x="152" y="26">u</text><text x="130" y="134">v</text>
+    <text x="332" y="26">a</text><text x="318" y="52">b</text>
+    <text x="40" y="152">张成整个平面</text><text x="216" y="152">张成一条直线</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 张成：不共线的两支向量铺满平面（左），共线的两支只铺出一条线（右）</figcaption>
+  </figure>
+
+  <h2>把方程组读成列向量</h2>
+
+  <p>同一个配方问题，按行读是两条关于 <span class="math-inline">x</span> 与 <span class="math-inline">y</span> 的方程；按列读是另一回事：把每个未知量的系数各自收成一列，第一列是 <span class="math-inline">(1, 2)</span>（A 液的成分），第二列是 <span class="math-inline">(2, 1)</span>（B 液的成分），右端项是 <span class="math-inline">(4, 5)</span>（目标成分）。于是两组写法说的是同一件事：</p>
+
+  <div class="math-block">\left\{\begin{aligned} x + 2y &amp;= 4 \\ 2x + y &amp;= 5 \end{aligned}\right. \qquad\Longleftrightarrow\qquad x \begin{bmatrix} 1 \\ 2 \end{bmatrix} + y \begin{bmatrix} 2 \\ 1 \end{bmatrix} = \begin{bmatrix} 4 \\ 5 \end{bmatrix}</div>
+
+  <p>右边这句话读作：给两列各配一个系数，让它们的组合落在右端项上。把两列并排写成一个数表，再把未知量与目标也写成竖排，就得到最紧凑的形式：</p>
+
+  <div class="math-block">\begin{bmatrix} 1 &amp; 2 \\ 2 &amp; 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 4 \\ 5 \end{bmatrix}</div>
+
+  <p>也就是 <span class="math-inline">Ax = b</span>，其中 <span class="math-inline">A</span> 是系数排成的矩阵，<span class="math-inline">x = (x, y)</span> 是未知量，<span class="math-inline">b = (4, 5)</span> 是目标。矩阵在这里只有一个作用：把若干列向量并排放在一起。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="从原点先走两倍的第一列，再走一倍的第二列，落点正好是右端项">
+<svg viewBox="0 0 340 180" role="img" aria-hidden="true" font-family="sans-serif" font-size="11">
+  <g stroke="currentColor" stroke-width="1" opacity="0.35">
+    <line x1="40" y1="140" x2="310" y2="140"/><line x1="40" y1="20" x2="40" y2="160"/>
+  </g>
+  <g stroke="currentColor" fill="none">
+    <line x1="40" y1="140" x2="76" y2="100" stroke-width="2"/>
+    <line x1="76" y1="100" x2="112" y2="60" stroke-width="2" stroke-dasharray="5 3"/>
+    <line x1="112" y1="60" x2="132" y2="80" stroke-width="2"/>
+    <line x1="40" y1="140" x2="132" y2="80" stroke-width="2.5"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="40" cy="140" r="2.5"/><circle cx="132" cy="80" r="3"/>
+  </g>
+  <g fill="currentColor" opacity="0.9">
+    <text x="70" y="118">(1, 2)</text>
+    <text x="86" y="52">(1, 2)</text>
+    <text x="120" y="96">(2, 1)</text>
+    <text x="140" y="76">(4, 5)</text>
+    <text x="24" y="156">(0, 0)</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 列视角：<span class="math-inline">2(1, 2) + 1(2, 1)</span> 的落点就是 <span class="math-inline">(4, 5)</span></figcaption>
+  </figure>
+
+  <p>按列读完，解的有无与多少就有了统一的说法：</p>
+
+  <table>
+    <thead>
+      <tr><th>解的情形</th><th>列向量的说法</th><th>平面上的图像</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>唯一解</td><td>两列不共线，右端项一定能拼出来，且拼法只有一种</td><td>两条不平行的直线交于一点</td></tr>
+      <tr><td>无穷多解</td><td>两列共线，右端项也落在那条直线上，拼法不唯一</td><td>两条直线重合</td></tr>
+      <tr><td>无解</td><td>右端项落在两列张成之外，怎么配系数都拼不出来</td><td>两条平行直线</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "方程组 $x + 2y = 4$、$2x + y = 5$ 按列读，两列与右端项分别是哪些数？",
+    "opts": [
+      "两列是 $(1, 2)$ 与 $(2, 1)$，右端项是 $(4, 5)$",
+      "两列是 $(1, 2)$ 与 $(4, 5)$，右端项是 $(2, 1)$",
+      "两列是 $(2, 1)$ 与 $(4, 5)$，右端项是 $(1, 2)$",
+      "两列是 $(1, 1)$ 与 $(2, 2)$，右端项是 $(4, 5)$"
+    ],
+    "ans": 0,
+    "why": "按列读要把每个未知量的系数各自收成一列：$x$ 的系数是 $(1, 2)$，$y$ 的系数是 $(2, 1)$，\n两列右边的常数收起来就是右端项 $(4, 5)$。\n解这个方程组，就是给这两列各配一个系数、让组合落在 $(4, 5)$ 上：\n2 倍的 $(1, 2)$ 加 1 倍的 $(2, 1)$ 正好等于 $(4, 5)$。"
+  },
+  {
+    "q": "把方程组 $3x = 6$、$x + y = 4$ 写成列向量的线性组合的形式，并说明为什么它有唯一解。",
+    "answer": "第一个未知量的系数收成一列 $(3, 1)$，第二个未知量的系数收成一列 $(0, 1)$，\n右端项是 $(6, 4)$。于是方程组等价于\n\n$x$ 倍的 $(3, 1)$ 加上 $y$ 倍的 $(0, 1)$ 等于 $(6, 4)$。\n\n两列 $(3, 1)$ 与 $(0, 1)$ 不成比例，是线性无关的，它们张成整个平面；\n右端项 $(6, 4)$ 一定能被拼出来，而且拼法只有一种。\n解出来是 $x = 2$、$y = 2$：2 倍的 $(3, 1)$ 加 2 倍的 $(0, 1)$ 等于 $(6 + 0, 2 + 2)$，正好是 $(6, 4)$。",
+    "criteria": "① 两列写对：$x$ 的系数列 $(3, 1)$、$y$ 的系数列 $(0, 1)$——每列 1 分，共 2 分；\n② 右端项写成 $(6, 4)$，得 1 分；\n③ 说出「两列不成比例所以线性无关、张成整个平面」，得 2 分；\n④ 给出解 $x = 2$、$y = 2$ 并代回验证，得 1 分。\n只写「两个未知量两个方程所以唯一」不给 ③ 的分：方程个数与解的唯一性没有必然关系。"
+  }
+]'></div>
+
+  <h2>术语：线性无关</h2>
+
+  <p>18 世纪的数学家整理方程组时注意到一类现象：有些方程是多余的，把它删掉，解集一点不变，因为它的系数行能由别的行凑出来。他们把这种互相牵制的关系叫相依（dependent），把不存在牵制的叫无关（independent）。这个词后来直接搬进向量的语言，因为方程组与向量组本来是同一件事的两面。</p>
+
+  <p>一组向量 <span class="math-inline">v_1, v_2, \dots, v_n</span> 称为<b>线性无关</b>（linearly independent），如果</p>
+
+  <div class="math-block">c_1 v_1 + c_2 v_2 + \dots + c_n v_n = 0</div>
+
+  <p>只有 <span class="math-inline">c_1 = c_2 = \dots = c_n = 0</span> 这一种可能；只要能找到一组不全为零的系数让组合等于零向量，这组向量就称为<b>线性相关</b>（linearly dependent）。</p>
+
+  <p>几何上，线性无关意味着每一支向量都提供了别处拿不到的新方向：平面上两支向量线性无关当且仅当它们不共线；平面上任意三支向量一定线性相关。三维空间里，三支向量线性无关当且仅当它们不落在同一个过原点的平面上。判别两支具体向量只看一件事：一支能否写成另一支的倍数。<span class="math-inline">2(1, 2) = (2, 4)</span>，所以 <span class="math-inline">(1, 2)</span> 与 <span class="math-inline">(2, 4)</span> 相关；<span class="math-inline">(1, 2)</span> 与 <span class="math-inline">(2, 1)</span> 无关，因为若 <span class="math-inline">t(1, 2) = (2, 1)</span>，第一个分量要求 <span class="math-inline">t = 2</span>，第二个分量要求 <span class="math-inline">t = 1/2</span>，两者矛盾。</p>
+
+  <p>两个边界值得记住。任何包含零向量的向量组一定线性相关：让零向量的系数取 <span class="math-inline">1</span>、其余取 <span class="math-inline">0</span>，就得到一组不全为零的系数使组合为零向量。单独一支非零向量构成的向量组线性无关。判定时只看方向，与长度无关：<span class="math-inline">(1, 2)</span> 与 <span class="math-inline">(100, 200)</span> 相关，尽管两者长度差很多。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "三维空间里有三支向量 $u$、$v$、$w$。已知 $w$ 能写成 $u$ 与 $v$ 的线性组合，\n下面哪个说法对？",
+    "opts": [
+      "线性相关，三支向量落在同一个过原点的平面上",
+      "线性无关，三支向量各自提供了一个新方向",
+      "线性相关，因为三支向量一定互相平行",
+      "线性无关，因为三支向量方向都不一样"
+    ],
+    "ans": 0,
+    "why": "$w$ 由 $u$ 与 $v$ 拼得出来，说明它没有带来第三个新方向：三支向量的全部线性组合\n都摊在 $u$ 与 $v$ 张成的那个过原点的平面上。\n按定义，这意味着一组不全为零的系数能让组合等于零向量，所以线性相关。\n互相平行只是相关的一种极端情形，方向各不相同的三支向量同样可能相关——\n比如 $(1, 0, 0)$、$(0, 1, 0)$、$(1, 1, 0)$ 就落在同一个平面上。"
+  },
+  {
+    "q": "用自己的话说清：为什么平面上的三支向量一定线性相关，而两支向量可能线性无关？",
+    "answer": "平面只有两个独立方向，也就是只有两个维度。\n两支架在平面上的向量，只要不共线就各占一个独立方向，谁也拼不出谁，所以线性无关。\n第三支向量没有第三个方向可用，它的方向必然能由前两支拼出来：\n取前两支的一组系数拼出第三支，再把第三支的系数取成负一倍相加，\n就得到一组不全为零的系数让组合等于零向量，按定义就是线性相关。\n例如 $(1, 0)$、$(0, 1)$、$(1, 1)$ 三支：第三支等于前两支之和，\n$(1, 0) + (0, 1) - (1, 1) = (0, 0)$，系数 $1$、$1$、$-1$ 不全为零。",
+    "criteria": "① 答出平面只有两个独立方向（维数为 $2$），得 2 分；\n② 答出「第三支的方向必能由前两支拼出，于是存在不全为零的系数使组合为零向量」，得 2 分；\n③ 举出一个具体例子并写出那组系数，得 1 分。\n把「三支向量在三维里才可能无关」直接背出来、没有解释机制的，第 ② 条不给分。"
+  }
+]'></div>
+
+  <h2>相关推不出有解</h2>
+
+  <div class="lesson-warn">
+    <b>相关的列只保证拼法不唯一</b>
+    <p>两列成比例时它们线性相关，但相关说的是「拼法不唯一」，它没有保证「拼得出来」。<span class="math-inline">(1, 2)</span> 与 <span class="math-inline">(2, 4)</span> 的全部线性组合都落在直线 <span class="math-inline">y = 2x</span> 上：目标取 <span class="math-inline">(3, 6)</span>，方程有无穷多解；目标改成 <span class="math-inline">(3, 7)</span>，它落在直线之外，方程组无解。判断永远分两步走——先看右端项在不在张成里（决定有没有解），再看列向量是否无关（决定解唯一不唯一）。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "下面这句话哪里不对：\n「$(1, 2)$ 与 $(2, 4)$ 成比例，所以方程组 $x + 2y = 3$、$2x + 4y = 7$ 有无穷多解。」\n请说清错在哪一步，并给出正确的结论。",
+    "answer": "错在把「两列线性相关」直接当成了「有无穷多解」。\n相关只能说明拼法不唯一，能不能拼出来还要看右端项在不在两列的张成里。\n$(1, 2)$ 与 $(2, 4)$ 的全部线性组合都落在直线 $y = 2x$ 上，\n而右端项 $(3, 7)$ 不在这条直线上（7 不等于 2 乘 3），所以这个方程组无解。\n把右端项换成 $(3, 6)$ 才轮得到「无穷多解」这个结论：\n此时 $(3, 6)$ 落在直线上，$x$ 可以任意取，$y$ 由 $x$ 定出来。\n判断顺序是两步：先看右端项在不在张成里，再看拼法是否唯一。",
+    "criteria": "① 指出错在「相关 ⇒ 有无穷多解」这一步，得 2 分；\n② 说明全部组合落在直线 $y = 2x$ 上、而 $(3, 7)$ 不在线上，得 2 分；\n③ 结论正确写成无解，得 1 分；\n④ 补出换成 $(3, 6)$ 就有无穷多解，或明确说出判断的两步顺序，得 1 分。\n只说「无解」不说理由的，最多得 ① 的一半。"
+  }
+]'></div>
+
+  <h2>用 Python 走一遍</h2>
+
+  <p><code>zip(*A)</code> 把行转成列，下面这段把列视角与行视角各算一遍：</p>
+
+  <pre data-lang="python"><code>A = [[1, 2], [2, 1]]            # 两列分别是 (1, 2) 与 (2, 1)
+x = [2, 1]                      # 待验证的系数
+
+columns = list(zip(*A))
+print(columns)                  # [(1, 2), (2, 1)]
+
+result = [sum(c * k for c, k in zip(col, x)) for col in columns]
+print(result)                   # [4, 5]
+
+rows = [sum(a * k for a, k in zip(row, x)) for row in A]
+print(rows, rows == result)     # [4, 5] True</code></pre>
+
+  <p>列视角是「每列乘上对应系数再逐位相加」，行视角是「每行与未知量做点积」。两者算出同一个结果，但只有列视角能回答「为什么解方程组等于拼向量」：结果 <span class="math-inline">[4, 5]</span> 正是目标成分，说明这份配方成立。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 1 步 · 亲手拼一次</span>
+    </div>
+
+      <p>把上面那段存成 <code>combine.py</code> 跑一遍，然后做两件事：</p>
+
+      <ol>
+        <li>把 <code>x</code> 改成 <code>[1, 1]</code>，先猜结果，再跑一遍看猜得对不对；</li>
+        <li>把 <code>A</code> 换成两列成比例的 <code>[[1, 2], [2, 4]]</code>，分别取 <code>x = [1, 1]</code> 与 <code>x = [2, 0]</code>，比较两次的落点。</li>
+      </ol>
+
+      <pre data-lang="sh"><code>python3 -c "
+A = [[1, 2], [2, 4]]
+for x in ([1, 1], [2, 0], [3, -1]):
+    print(x, [sum(c * k for c, k in zip(col, x)) for col in zip(*A)])
+"</code></pre>
+
+      <p>三次输出分别是 <code>(3, 6)</code>、<code>(2, 4)</code>、<code>(1, 2)</code>，都落在直线 <span class="math-inline">y = 2x</span> 上。共线的两列只能张成这条直线，系数怎么换都出不去。</p>
+  </div>
+
+  <h2>练习：判断解的有无</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 先猜再算</span>
+    </div>
+
+      <p>不看消元，先按列读下面的三元方程组：</p>
+
+      <div class="math-block">\left\{\begin{aligned} x + y + z &amp;= 4 \\ 2x + 2y + 2z &amp;= 8 \\ x - y &amp;= 0 \end{aligned}\right.</div>
+
+      <ol>
+        <li>写出它的三列与右端项；</li>
+        <li>判断三列是否线性相关，并说出理由；</li>
+        <li>猜它有几个解，再取一组数代回三个方程验证。</li>
+      </ol>
+
+      <p>提示：第三列与另外两列之间有简单的关系。下一课会用消元把结论核对一遍。</p>
+  </div>
+
+  <h2>这一课的一个模型</h2>
+
+  <p>整节课只有一个模型：<b>解方程组就是找一组系数，让列向量的线性组合等于右端项</b>。拼得出来就至少有一个解，拼法唯一就是唯一解，拼不出来就是无解。手里的工具只有两件：向量相加、向量乘一个数。下一课把「若干列并排站着」的矩阵升级成一个对空间做的动作，秩与零空间会给出解集的维数。</p>
+
+  <ul class="lesson-resources">
+    <li><a href="https://www.3blue1brown.com/lessons/vectors">3Blue1Brown · 向量究竟是什么</a><span class="lesson-resources__meta">视频 · 三种视角看同一个向量</span></li>
+    <li><a href="https://www.3blue1brown.com/lessons/span">3Blue1Brown · 线性组合、张成与基向量</a><span class="lesson-resources__meta">视频 · 张成与线性无关的动画解释</span></li>
+    <li><a href="https://mml-book.github.io/">Mathematics for Machine Learning 第 2 章</a><span class="lesson-resources__meta">书 · 官方 PDF，符号偏工程，用来对照术语</span></li>
+    <li><a href="https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/">MIT 18.06 第 5~9 讲（列空间与零空间）</a><span class="lesson-resources__meta">视频 · 与本课顺序相反，用来补推导</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--next" href="0002-matrix.transform.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">矩阵与线性变换</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0001 向量与线性组合 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+nodes:
+  - id: vector.space
+    title: 向量与线性组合
+    kind: 概念
+    objective: "能把方程组读成列向量的线性组合，并说清线性无关的几何含义"
+    problem: "同一个方程组按行读是一堆方程、按列读是「用几支箭头拼出目标箭头」——后一种读法为什么更能说清解的有无"
+    prerequisites: []
+    concepts: [向量, 线性组合, 张成, 线性无关, 列视角]
+    resources:
+      - title: 3Blue1Brown · 向量究竟是什么
+        url: https://www.3blue1brown.com/lessons/vectors
+        type: video
+      - title: 3Blue1Brown · 线性组合、张成与基向量
+        url: https://www.3blue1brown.com/lessons/span
+        type: video
+      - title: Mathematics for Machine Learning（Deisenroth 等）第 2 章
+        url: https://mml-book.github.io/
+        type: book
+    practice: "把 2×2 方程组写成两列的线性组合，用 Python 把组合算出来验证答案，再判断一个给定向量的方程组有没有解"
+    pitfalls:
+      - 把矩阵乘向量当成两个数组逐元素相乘
+      - 只会按行消元，看不出右端项在不在列向量的张成里
+      - 把「线性无关」理解成「向量互不相等」或「长度不为零」
+      - 以为相关就一定有解
+    realworld: "配方、混料、推荐：都是「手里几种原料各取多少，凑出目标那一份」"
+    status: 能独立应用
+    mastery: 0.8
+
+  - id: matrix.transform
+    title: 矩阵与线性变换
+    kind: 概念
+    objective: "能把矩阵读成对空间的变换，并说出秩与零空间的含义"
+    prerequisites: [vector.space]
+    concepts: [线性变换, 基向量的像, 秩, 零空间, 秩-零化度定理]
+    resources:
+      - title: 3Blue1Brown · 线性变换与矩阵
+        url: https://www.3blue1brown.com/lessons/linear-transformations
+        type: video
+      - title: MIT 18.06 线性代数（Gilbert Strang）第 5~9 讲
+        url: https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/
+        type: video
+      - title: NumPy 官方文档 · numpy.linalg.matrix_rank
+        url: https://numpy.org/doc/stable/reference/generated/numpy.linalg.matrix_rank.html
+        type: official-doc
+    practice: "给一个把平面压成一条直线的矩阵，手算它把三个具体向量送到了哪里，再解释秩与零空间各是几维"
+    pitfalls:
+      - 把秩数成「矩阵里非零数的个数」或「原矩阵非零行的个数」
+      - 把零空间当成「方程组无解时出现的那个空间」
+      - 秩-零化度定理里的未知量个数记成行数
+      - 以为所有变换都能写成矩阵（平移不行）
+    realworld: "修图软件里的旋转、斜切、缩放，动作都是「给每个像素坐标乘同一个矩阵」"
+    status: 初步理解
+    mastery: 0.55
+
+  - id: system.elimination
+    title: 高斯消元与解的结构
+    kind: 实操
+    objective: "能手写消元把线性方程组解出来，并判断解的存在性与自由度"
+    prerequisites: [vector.space, matrix.transform]
+    concepts: [增广矩阵, 初等行变换, 行阶梯形, 主元, 自由变量, 解的结构]
+    resources:
+      - title: MIT 18.06 线性代数（Gilbert Strang）第 1~2 讲（消元法）
+        url: https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/
+        type: video
+      - title: Python 官方文档 · fractions.Fraction
+        url: https://docs.python.org/zh-cn/3/library/fractions.html
+        type: official-doc
+      - title: NumPy 官方文档 · numpy.linalg.solve
+        url: https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html
+        type: official-doc
+    practice: "先手算一个 3×3 方程组的消元全过程，再到 lab 里把 rref 与 solve 实现出来，让三种解的情形都通过断言"
+    pitfalls:
+      - 消元时只改系数，忘了右端项要同步做同样的行变换
+      - 把「某一行化成全零」当成无解（那只是这一行没带来新信息）
+      - 数自由变量时数错主元个数，把解集的维数说错
+      - 主元位置是 0 时不换行，直接除零
+    realworld: "电路节点方程、配料平衡、最小二乘拟合，底层都是同一套消元；numpy.linalg.solve 只是把它写快了"
+    status: 学习中
+    mastery: 0.3
+
+  - id: space.basis
+    title: 基、维数与坐标
+    kind: 概念
+    objective: "能为一组向量求基与维数，并在给定基下写出坐标"
+    prerequisites: [matrix.transform]
+    concepts: [基, 维数, 坐标, 标准基, 换基]
+    resources:
+      - title: 3Blue1Brown · 基变换
+        url: https://www.3blue1brown.com/lessons/change-of-basis
+        type: video
+      - title: Mathematics for Machine Learning（Deisenroth 等）第 2.6 节
+        url: https://mml-book.github.io/
+        type: book
+      - title: SymPy 官方文档 · 矩阵的 rref 与 columnspace
+        url: https://docs.sympy.org/latest/modules/matrices/matrices.html
+        type: official-doc
+    practice: "从四个三维向量里挑出一组基，把剩下的那个写成这组基的坐标，再用 lab 里的 pivot_columns 核对"
+    pitfalls:
+      - 把基当成「随便挑的几个向量」，忘了还要能张成整个空间
+      - 以为坐标是向量自带的属性，而不是相对于某一组基才有的
+      - 换基时把两组基的矩阵乘反了顺序
+    realworld: "JPEG 把图像换到频域的一组基上看，同一张图用更少的系数就能记住"
+    status: 未开始
+    mastery: 0
+
+  - id: eigen.basic
+    title: 特征值与特征向量
+    kind: 实验
+    objective: "能用特征分解解释一个真实变化过程（如人口迁移或图像压缩）"
+    problem: "同一个矩阵反复作用在一个初始状态上，长期之后它会停在哪里、还是继续变"
+    prerequisites: [vector.space, matrix.transform, system.elimination, space.basis]
+    concepts: [特征值, 特征向量, 特征多项式, 对角化, 长期行为]
+    resources:
+      - title: MIT 18.06 线性代数（Gilbert Strang）第 21~22 讲（特征值与对角化）
+        url: https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/
+        type: video
+      - title: NumPy 官方文档 · numpy.linalg.eig
+        url: https://numpy.org/doc/stable/reference/generated/numpy.linalg.eig.html
+        type: official-doc
+    practice: "为一个可复现的变化过程（人口迁移或图像压缩）写出状态转移矩阵，用特征分解解释长期走向，并用代码验证"
+    pitfalls:
+      - 把特征向量的方向记反（同一个向量前后方向要一致）
+      - 忘记特征值可以是复数，遇到旋转就以为算错
+      - 以为任何矩阵都能对角化
+    realworld: "人口迁移的长期预测、网页排名的收敛、图像压缩保留哪些主方向"
+    status: 未开始
+    mastery: 0
+
+edges:
+  - from: vector.space
+    to: matrix.transform
+    reason: "矩阵的每一列是基向量变换后的落点，先会读列向量才读得懂矩阵"
+  - from: vector.space
+    to: system.elimination
+    reason: "消元的结果要用列的组合来解释：有没有解看右端项在不在张成里，解多不多看拼法唯一不唯一"
+  - from: matrix.transform
+    to: system.elimination
+    reason: "秩与零空间给出解集的维数，消元只是把这两个数算出来的手段"
+  - from: matrix.transform
+    to: space.basis
+    reason: "基是「变换后仍然独立的方向」这个概念的一般化"
+  - from: system.elimination
+    to: space.basis
+    reason: "求基与维数的操作就是把向量排成矩阵数主元，手上要先有消元这套工具"
+  - from: vector.space
+    to: space.basis
+    reason: "张成与线性无关正是基的两个条件，先分清这两件事"
+  - from: vector.space
+    to: eigen.basic
+    reason: "实验课验收线性组合：长期迭代的结果是特征向量的组合"
+  - from: matrix.transform
+    to: eigen.basic
+    reason: "实验课验收线性变换：特征方向就是变换下方向不变的方向"
+  - from: system.elimination
+    to: eigen.basic
+    reason: "实验课验收消元：求特征向量要解齐次方程组"
+  - from: space.basis
+    to: eigen.basic
+    reason: "实验课验收基与坐标：特征向量构成一组基，初始状态要在这组基下分解"

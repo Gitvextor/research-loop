@@ -1,0 +1,12 @@
+在当前 E:\学习工具 工作区的新 Codex 任务中可直接发送：
+
+$learning-loop-studymate 我想学【主题】，目标是【能独立完成的成果】。先做五视角调研，给我看主要分歧和核心路径，再把交接简报交给 StudyMate 建课。我的基础是【填写】，每周可学【填写】小时。学习工作区是【绝对路径；还没选可以暂留空】。
+
+如果 StudyMate 完整插件已经安装，也可以在新任务选择其 $learning-system，并发送：
+
+请按 StudyMate 的 learning-system 流程接入这份外部学习简报：【learning-loop 生成的交接文件绝对路径】。已知信息请复用，只问建课所缺的选择；已有科目先恢复进度。学习工作区：【绝对路径】。
+
+复盘入口：
+$learning-loop-studymate 请只读我的 StudyMate 学习工作区【绝对路径】，根据真实评估和错因做十步闭环复盘，列出需要补练的节点与证据。不要把学习计划当作已掌握。
+
+当前工作区有 StudyMate 源码；源码本身不等于已安装的 Codex 插件。若技能列表没有 learning-system，按源码中的 docs/Codex与ChatGPT.md 构建或导入完整 StudyMate 插件后使用。

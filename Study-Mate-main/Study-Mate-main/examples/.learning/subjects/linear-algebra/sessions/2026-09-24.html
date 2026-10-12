@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-09-24 会话摘要 · 线性代数</title>
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>线性代数</span>
+  <span class="lesson-bar__no">会话摘要</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>2026-09-24 会话摘要</h1>
+<h2>这次会话做了什么</h2>
+<p>一次 40 分钟的会话，前半段学完第 2 课，后半段开了第 3 课的 lab。</p>
+<ol>
+<li><strong>第 2 课</strong>（<code>matrix.transform</code>）：从修图软件的斜切滑杆进场，把矩阵读成一个动作。他的接受路径是<br>先画图、再说话，所以课件里那张「单位方格被拉成平行四边形」的示意图用上了。秩的几何解释一次就通；<br>零空间维数先答错（用了行数），让他直接解 <code>x + 2y = 0</code> 之后自己纠正。</li>
+<li><strong>第 3 课</strong>（<code>system.elimination</code>）：课件过了一遍，讲到「消元后只看两件事：有没有矛盾行、有几个<br>主元」。他跟我一起手算了一个 3×3 的例子，在「第三行除以常数」那一步忘了同步右端项，自己发现后<br>重算了一遍——这个错恰好是课件里那个 <code>warn</code> 卡片讲的内容。</li>
+<li><strong>lab 开了一个头</strong>：<code>lab/0003-system-elimination/gauss.py</code> 里 <code>rref</code> 已经写出来并跑过测试<br>（<code>TestRref</code> 6 条全绿），<code>pivot_columns</code>、<code>rank</code>、<code>solve</code> 还是 <code>NotImplementedError</code>，<br>整份测试仍是红的（23 条里 21 条报错、退出码 1）。</li>
+</ol>
+<h2>评估记录的变化</h2>
+<ul>
+<li>第 1 课 <code>vector.space</code> 的阶段评估在 9 月 22 日完成，结论「通过」、掌握度 <strong>0.8</strong>，已写进<br><code>assessments/0001-vector.space.md</code>。这次没有新的评估。</li>
+<li>第 2 课这次只学不评。按「攒 3~5 个节点做一次阶段评估」的习惯，等 <code>space.basis</code> 学完之后，<br>把 <code>matrix.transform</code> 与 <code>system.elimination</code> 放在一起评。</li>
+</ul>
+<h2>下次从哪继续</h2>
+<p>先把 lab 做完——那是第 3 课的交付物，也是第 4、5 课要接着用的工具。做完之后回课件答那三道题，<br>再进 <code>space.basis</code>。零空间那个误解会在 lab 做完后让他口头复述一次「自由变量个数 = 列数 − 秩」，<br>并且用一个 3 列的矩阵现场算一遍。</p>
+  <footer class="lesson-footer">
+    StudyMate · 2026-09-24 会话摘要 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

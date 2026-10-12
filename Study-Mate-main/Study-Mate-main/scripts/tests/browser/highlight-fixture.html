@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>代码块高亮 fixture</title>
+<link rel="stylesheet" href="../../../templates/assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../templates/assets/learn-theme.css">
+<link rel="stylesheet" href="../../../templates/assets/style.css">
+<script src="../../../templates/assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+<body class="lesson-body">
+<article class="lesson">
+
+<h2>1 cpp 源码</h2>
+<pre id="b1"><code>#include &lt;iostream&gt;
+// 读入 n 个数求和
+int main() {
+    int n = 3;
+    double sum = 0;
+    std::cout &lt;&lt; "n = " &lt;&lt; n &lt;&lt; std::endl;
+    for (int i = 0; i &lt; n; ++i) {
+        sum += i * 1.5;
+    }
+    return 0;
+}</code></pre>
+
+<h2>2 shell 命令</h2>
+<pre id="b2"><code>mkdir -p ~/cpp &amp;&amp; cd ~/cpp
+g++ hello.cpp -o hello   # -o 指定输出名
+./hello
+echo $PATH</code></pre>
+
+<h2>3 编译器输出</h2>
+<pre id="b3"><code>hello.cpp:5:40: error: expected ‘;’ before ‘return’
+    5 |     cout &lt;&lt; "Hello" &lt;&lt; endl
+      |                                        ^
+hello.cpp:5:40: warning: unused variable ‘tmp’</code></pre>
+
+<h2>4 普通输出（不动）</h2>
+<pre id="b4"><code>Hello, StudyMate!</code></pre>
+
+<h2>5 自动识别的编辑器块</h2>
+<div class="syo-editor" id="b5">
+  <div class="syo-editor-titlebar">
+    <span class="syo-editor-dots"><span class="syo-editor-dot syo-editor-dot--red"></span><span class="syo-editor-dot syo-editor-dot--yellow"></span><span class="syo-editor-dot syo-editor-dot--green"></span></span>
+    <span class="syo-editor-filename">hello.cpp</span>
+  </div>
+  <div class="syo-editor-body">
+    <div class="syo-editor-gutter"><span>1</span><span>2</span><span>3</span></div>
+    <div class="syo-editor-code">
+      <span class="line">#include &lt;iostream&gt;</span>
+      <span class="line">int main() { return 0; }</span>
+      <span class="line">// 注释</span>
+    </div>
+  </div>
+</div>
+
+<h2>6 手写高亮的块（跳过）</h2>
+<div class="syo-editor" id="b6">
+  <div class="syo-editor-body">
+    <div class="syo-editor-gutter"><span>1</span></div>
+    <div class="syo-editor-code">
+      <span class="line">hello.cpp:5:40: <span class="syn-keyword">error</span>: expected ‘;’</span>
+    </div>
+  </div>
+</div>
+
+<h2>7 显式 data-lang</h2>
+<pre id="b7" data-lang="sh"><code>npm run build -- --watch</code></pre>
+<pre id="b8" data-lang="text"><code>g++ hello.cpp -o hello</code></pre>
+
+<h2>8 真实课件里的难例</h2>
+<pre id="b9"><code>hello                # bash: 行 1: hello: 未找到命令
+./hello              # Hello, StudyMate!</code></pre>
+<pre id="b10"><code>    cout &lt;&lt; "Hello, StudyMate!" &lt;&lt; endl</code></pre>
+<pre id="b11"><code>mkdir -p ~/cpp &amp;&amp; cd ~/cpp &amp;&amp; cat &gt; hello.cpp &lt;&lt;'EOF'
+#include &lt;iostream&gt;
+EOF</code></pre>
+<pre id="b12"><code>g++ hello.cpp -o hello &amp;&amp; ./hello</code></pre>
+<pre id="b13"><code>Hello, StudyMate! 第一次跑通！</code></pre>
+<pre id="b14"><code>1 ≤ n ≤ 10⁵</code></pre>
+<pre id="b15"><code>const x = { a: 1 };
+console.log(x);</code></pre>
+<pre id="b16"><code>&lt;nav class="syo-nav"&gt;
+  &lt;a href="/docs"&gt;文档&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+<pre id="b17"><code>{
+  "name": "studymate",
+  "version": 2,
+  "ok": true
+}</code></pre>
+<pre id="b18"><code>interface Lesson {
+  id: string;
+  minutes?: number;
+}</code></pre>
+
+</article>
+</body>
+</html>

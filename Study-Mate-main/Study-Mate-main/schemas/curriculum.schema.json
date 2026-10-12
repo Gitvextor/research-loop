@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Curriculum",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "objective", "prerequisites", "status", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+([.-][a-z0-9]+)*$" },
+          "title": { "type": "string" },
+          "kind": {
+            "enum": ["概念", "实操", "实验"],
+            "description": "节点类型；三种课型的含义、产出与题目上限见 `layered-practice` 第四节，通过后的置位规则见 `record-keeping` 的「项目与实验课」。"
+          },
+          "objective": { "type": "string" },
+          "problem": { "type": "string" },
+          "prerequisites": { "type": "array", "items": { "type": "string" } },
+          "concepts": { "type": "array", "items": { "type": "string" } },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "type"],
+              "properties": {
+                "title": { "type": "string" },
+                "url": { "type": "string" },
+                "type": { "enum": ["official-doc", "book", "article", "video"] }
+              }
+            }
+          },
+          "practice": { "type": "string" },
+          "pitfalls": { "type": "array", "items": { "type": "string" } },
+          "realworld": { "type": "string" },
+          "status": { "enum": ["未开始", "学习中", "初步理解", "能独立应用", "需要复习", "已通过项目验证"] },
+          "mastery": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "reason"],
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

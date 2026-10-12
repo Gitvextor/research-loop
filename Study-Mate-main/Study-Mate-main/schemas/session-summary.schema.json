@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SessionSummary",
+  "type": "object",
+  "required": ["date", "subject", "session_goal", "learned", "next_step", "weaknesses"],
+  "properties": {
+    "date": { "type": "string", "format": "date" },
+    "subject": { "type": "string" },
+    "session_goal": { "type": "string" },
+    "learned": { "type": "array", "items": { "type": "string" } },
+    "next_step": { "type": "string" },
+    "weaknesses": { "type": "array", "items": { "type": "string" } },
+    "memory_updates": { "type": "array", "items": { "type": "string" } }
+  }
+}

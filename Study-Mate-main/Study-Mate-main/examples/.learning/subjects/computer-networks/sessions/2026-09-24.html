@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-09-24 会话摘要 · 计算机网络</title>
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>计算机网络</span>
+  <span class="lesson-bar__no">会话摘要</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>2026-09-24 会话摘要</h1>
+<h2>本次要点</h2>
+<ul>
+<li>第 2 课（链路层与以太网帧）：读完正文并做完页内题；用 64 字节的真实帧做了练习，四个问题都答出来了，<br>其中「帧载荷 46 字节、IP 总长度 40 字节，差的 6 个字节是填充」是他自己从上一节的 46 字节推出来的</li>
+<li>第 3 课（IP 地址、子网与路由）：引入用「配错网关的机器」开场，读到前缀长度与网络地址的位运算；<br>lab 已下发，五个任务里 T1 写完，T2 只差非法输入的校验</li>
+<li>局部提问一次：<code>/26</code> 的掩码为什么是 <code>255.255.255.192</code>、网络地址为什么落在 <code>192.168.1.64</code>。<br>按具体数字走了一遍按位与之后接受，已记进误解库（<code>topic: 子网掩码的算法</code>，importance high）</li>
+</ul>
+<h2>卡在哪</h2>
+<ul>
+<li>位运算的直觉还不够：知道「掩码是与运算」，一动笔又想按 8 位一组切。lab 的 T3 就是为这个准备的，<br>写完 <code>network_of</code> 再用标准库对一遍</li>
+<li>交换机与路由器的分工：能背出「交换机看 MAC、路由器看 IP」，但说不清同一个交换机下的两台机器<br>为什么不过路由器。这一条留到第 3 课讲完逐跳转发再回头验，别急着收</li>
+</ul>
+<h2>下次从哪继续</h2>
+<p>先跑 <code>cd lab/0003-ip-subnet &amp;&amp; python3 -m unittest -v</code> 看 T3、T4 红了哪几条，做完再回到课件的<br>「把开头的机器修好」那一节，对照答案收尾。</p>
+  <footer class="lesson-footer">
+    StudyMate · 2026-09-24 会话摘要 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

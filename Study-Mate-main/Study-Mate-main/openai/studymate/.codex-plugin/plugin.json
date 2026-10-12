@@ -1,0 +1,26 @@
+{
+  "name": "studymate",
+  "version": "0.1.5",
+  "description": "StudyMate 学习搭档：制定学习路线、生成 HTML 课件与练习、记录学习进度。支持 Codex 和 ChatGPT Work。",
+  "author": {
+    "name": "Cattofu"
+  },
+  "homepage": "https://github.com/Miaotofu01/Study-Mate#readme",
+  "repository": "https://github.com/Miaotofu01/Study-Mate",
+  "license": "MIT",
+  "keywords": ["learning", "education", "studymate", "codex", "chatgpt"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "StudyMate",
+    "shortDescription": "定计划、讲知识、做项目，学透一门科目。",
+    "longDescription": "面向数学与计算机科目的学习搭档。根据目标和基础制定课程路线，生成 HTML 课件、分层练习与项目实操，并在独立学习工作区记录进度。需要可读写文件和运行 Python 的环境。",
+    "developerName": "Cattofu",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/Miaotofu01/Study-Mate",
+    "brandColor": "#1C5A40",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
+    "defaultPrompt": ["我想系统学习线性代数，请先了解我的基础和目标。", "继续上次的学习，帮我查看进度。", "考考我最近学过的内容。"]
+  }
+}

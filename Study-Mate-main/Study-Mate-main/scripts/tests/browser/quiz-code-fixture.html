@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>题目里的代码块 fixture</title>
+<link rel="stylesheet" href="../../../templates/assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../templates/assets/learn-theme.css">
+<link rel="stylesheet" href="../../../templates/assets/style.css">
+<script src="../../../templates/assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+<body class="lesson-body">
+<article class="lesson">
+
+<h2>围栏代码块</h2>
+<!-- 第 1 题：围栏 + 嵌套缩进（断言缩进保留、上色发生）+ 前后各一段散文 -->
+<div class="quiz" id="q1" data-quiz='[{"q":"这段为什么死循环？\n\n```cpp\nint i = 1;\nwhile (i &lt;= 100) {\n    ++cnt;\n    if (cnt &gt; 9) break;\n}\n```\n\n① 变量谁没变？","opts":["i","cnt","都不是"],"ans":0,"why":"循环体里没改 i"}]'></div>
+
+<h2>纯散文题面（回归）</h2>
+<!-- 第 2 题：没有围栏，只有 \n——不该出现代码块 -->
+<div class="quiz" id="q2" data-quiz='[{"q":"n 是 5。\n循环体跑几次？","opts":["4","5","6"],"ans":1,"why":"从 1 数到 5"}]'></div>
+
+<script src="../../../templates/assets/sayo/sayo.js"></script>
+<script src="../../../templates/assets/quiz.js" defer></script>
+</article>
+</body>
+</html>
