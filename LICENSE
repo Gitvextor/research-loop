@@ -1,23 +1,19 @@
-Scope: This license applies only to original code, prompts, agent definitions, and documentation authored by Gitvextor within .codex/skills/learning-loop and .codex/agents. Third-party material in those paths retains its original terms. This license does not apply to Study-Mate-main, 操作系统, evaluations, ZIP archives, or other course and third-party materials in this repository.
-
-MIT License
+# License and scope
 
 Copyright (c) 2026 Gitvextor
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## Original software
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Original scripts, agent implementations, tools, and other software in this repository are licensed under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/). The official terms at that URL govern.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Required Notice: Copyright (c) 2026 Gitvextor (https://github.com/Gitvextor/research-loop)
+
+## Original written content
+
+Original prompts, methods, tutorials, and documentation in this repository are licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/legalcode). Credit the authors and link to this repository when sharing or adapting this content.
+
+## Boundaries
+
+Only original material authored by Gitvextor and authorized contributors within .codex/skills/learning-loop and .codex/agents is covered. Study-Mate-main, 操作系统, evaluations, ZIP archives, third-party components, and course materials are excluded.
+
+Previously distributed versions may remain available under their earlier license terms; this change does not revoke rights already granted for those versions.
