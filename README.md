@@ -16,9 +16,11 @@
 
 操作系统学习资料的入口在 `操作系统/操作系统/`。
 
-
 ## 许可证
 
-仓库中的原创 `.codex/skills/learning-loop` 和 `.codex/agents` 内容，在作者拥有版权的范围内按 [MIT License](LICENSE) 授权。原有第三方内容仍遵循各自的许可。
+本仓库不采用 MIT 作为当前版本的授权。仅对作者有权授权的原创内容适用以下条款，详情见 [LICENSE](LICENSE)：
 
-`Study-Mate-main`、`操作系统`、`evaluations`、ZIP 压缩包及其他课程或第三方资料不在上述 MIT 授权范围内。请分别核对来源与使用条件；仓库公开可见不代表这些材料可按 MIT 使用。
+- `.codex/skills/learning-loop`、`.codex/agents` 中的原创脚本、Agent 实现和工具代码：[PolyForm Noncommercial 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/)。
+- 上述目录中的原创提示词、方法说明、教程和文档：[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/legalcode)。
+
+`Study-Mate-main`、`操作系统`、`evaluations`、ZIP 压缩包以及其他课程或第三方资料均不在上述授权范围内，应遵循各自的使用条件。曾按 MIT 授权取得的旧版本，其既有授权不因本次变更而撤销。
